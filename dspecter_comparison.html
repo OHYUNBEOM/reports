@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>디스펙터 기술 비교 보고서</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Bebas+Neue&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f4f0;
+    --white: #ffffff;
+    --edge-col: #0f3d5c;
+    --edge-light: #e8f2f9;
+    --edge-mid: #1a6496;
+    --gcs-col: #1a3a2a;
+    --gcs-light: #e8f4ee;
+    --gcs-mid: #2d7a4f;
+    --accent: #e8a020;
+    --text: #1a1a1a;
+    --muted: #6b6b6b;
+    --border: #e0ddd6;
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    --shadow-lg: 0 12px 48px rgba(0,0,0,0.14);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 21px;
+    line-height: 1.7;
+  }
+
+  /* ── HERO ─────────────────────────────── */
+  .hero {
+    background: var(--edge-col);
+    padding: 80px 60px 70px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(26,100,150,0.4) 0%, transparent 65%);
+  }
+  .hero::after {
+    content: 'VS';
+    position: absolute;
+    right: 60px; bottom: -20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 180px;
+    color: rgba(255,255,255,0.04);
+    line-height: 1;
+    letter-spacing: -4px;
+  }
+
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .hero-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+  }
+  .hero-date {
+    color: rgba(255,255,255,0.45);
+    font-size: 21px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+  }
+
+  .hero h1 {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 700;
+    font-size: clamp(34px, 5vw, 56px);
+    color: #fff;
+    line-height: 1.35;
+    max-width: 700px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    margin-top: 16px;
+    color: rgba(255,255,255,0.55);
+    font-size: 20px;
+    font-weight: 300;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── SUMMARY CARDS ─────────────────────── */
+  .summary-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  .summary-card {
+    padding: 40px 48px;
+    position: relative;
+  }
+  .summary-card.edge { background: var(--edge-mid); }
+  .summary-card.gcs  { background: var(--gcs-mid); }
+
+  .summary-label {
+    font-family: 'Nunito', sans-serif;
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 8px;
+  }
+  .summary-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 14px;
+    line-height: 1.4;
+  }
+  .summary-title small {
+    display: block;
+    font-size: 21px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.65);
+    margin-top: 4px;
+  }
+  .summary-desc {
+    font-size: 20px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.75;
+  }
+  .summary-desc strong {
+    color: #fff;
+  }
+
+  /* ── MAIN CONTENT ──────────────────────── */
+  .container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 64px 48px;
+  }
+
+  .section-label {
+    font-family: 'Nunito', sans-serif;
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 20px; height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  .section-title {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 40px;
+    line-height: 1.3;
+  }
+
+  /* ── COMPARISON TABLE ──────────────────── */
+  .table-header {
+    display: grid;
+    grid-template-columns: 200px 1fr 1fr 120px;
+    gap: 2px;
+    margin-bottom: 2px;
+  }
+
+  .th {
+    padding: 16px 24px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 8px 8px 0 0;
+  }
+  .th.category { background: var(--text); color: #fff; }
+  .th.edge     { background: var(--edge-col); color: #fff; }
+  .th.gcs      { background: var(--gcs-col); color: #fff; }
+  .th.ref      { background: #888; color: #fff; font-size: 21px; }
+
+  .table-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 1fr 120px;
+    gap: 2px;
+    margin-bottom: 2px;
+    animation: fadeUp 0.4s ease both;
+  }
+  .table-row:nth-child(1) { animation-delay: 0.05s; }
+  .table-row:nth-child(2) { animation-delay: 0.10s; }
+  .table-row:nth-child(3) { animation-delay: 0.15s; }
+  .table-row:nth-child(4) { animation-delay: 0.20s; }
+  .table-row:nth-child(5) { animation-delay: 0.25s; }
+  .table-row:nth-child(6) { animation-delay: 0.30s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .table-row:last-child .cell { border-radius: 0 0 8px 8px; }
+
+  .cell {
+    background: var(--white);
+    padding: 28px 24px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .table-row:hover .cell {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+
+  .cell.cat-cell {
+    background: var(--text);
+    display: flex;
+    align-items: center;
+  }
+  .cat-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    color: rgba(255,255,255,0.12);
+    line-height: 1;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+  .cat-name {
+    font-size: 21px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.4;
+  }
+
+  .cell.edge-cell {
+    background: var(--edge-light);
+    border-left: 3px solid var(--edge-mid);
+  }
+  .cell.gcs-cell {
+    background: var(--gcs-light);
+    border-left: 3px solid var(--gcs-mid);
+  }
+  .cell.ref-cell {
+    background: #f8f7f4;
+    border-left: 3px solid #ccc;
+    font-size: 20px;
+    color: var(--muted);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+  }
+
+  .cell ul {
+    list-style: none;
+    padding: 0;
+  }
+  .cell ul li {
+    position: relative;
+    padding-left: 16px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    line-height: 1.7;
+  }
+  .cell ul li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    font-weight: 700;
+  }
+  .cell.edge-cell ul li::before { color: var(--edge-mid); }
+  .cell.gcs-cell ul li::before  { color: var(--gcs-mid); }
+
+  .cell p { font-size: 20px; line-height: 1.75; }
+
+  .keyword {
+    font-weight: 700;
+    font-size: 21px;
+  }
+  .edge-cell .keyword { color: var(--edge-col); }
+  .gcs-cell  .keyword { color: var(--gcs-col); }
+
+  .tag {
+    display: inline-block;
+    font-family: 'Nunito', sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+  .edge-cell .tag { background: var(--edge-col); color: #fff; }
+  .gcs-cell  .tag { background: var(--gcs-col); color: #fff; }
+
+  /* ── VALUE CARDS ───────────────────────── */
+  .value-section {
+    margin-top: 80px;
+  }
+
+  .value-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .value-group {
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  .value-group-header {
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .value-group-header.edge { background: var(--edge-col); }
+  .value-group-header.gcs  { background: var(--gcs-col); }
+
+  .value-group-icon {
+    width: 44px; height: 44px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+  }
+  .value-group-title {
+    font-size: 21px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.3;
+  }
+  .value-group-title small {
+    display: block;
+    font-size: 20px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.6);
+    margin-top: 2px;
+  }
+
+  .value-items {
+    padding: 24px 32px;
+  }
+
+  .value-item {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .value-item:last-child { border-bottom: none; }
+
+  .value-item-title {
+    font-size: 21px;
+    font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .value-item-title .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .edge .dot { background: var(--edge-mid); }
+  .gcs  .dot { background: var(--gcs-mid); }
+
+  .value-item p {
+    font-size: 20px;
+    color: var(--muted);
+    line-height: 1.7;
+    padding-left: 16px;
+  }
+  .value-item strong { color: var(--text); }
+
+  /* ── REFERENCES ────────────────────────── */
+  .ref-section {
+    margin-top: 80px;
+    background: var(--white);
+    border-radius: 16px;
+    padding: 40px 48px;
+    box-shadow: var(--shadow);
+  }
+
+  .ref-list {
+    list-style: none;
+    margin-top: 24px;
+  }
+  .ref-list li {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 16px;
+    font-size: 21px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+  .ref-list li:last-child { border-bottom: none; }
+  .ref-num {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    color: var(--accent);
+    flex-shrink: 0;
+    min-width: 28px;
+  }
+  .ref-list a { color: var(--edge-mid); text-decoration: none; border-bottom: 1px dashed var(--edge-mid); }
+  .ref-list a:hover { color: var(--edge-col); }
+
+  /* ── FOOTER ────────────────────────────── */
+  footer {
+    background: var(--text);
+    padding: 40px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 80px;
+  }
+  footer .left {
+    font-size: 21px;
+    color: rgba(255,255,255,0.4);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+  }
+  footer .right {
+    font-size: 20px;
+    color: rgba(255,255,255,0.25);
+    font-family: 'Nunito', sans-serif;
+  }
+
+  /* ── RESPONSIVE ────────────────────────── */
+  @media (max-width: 900px) {
+    .summary-strip { grid-template-columns: 1fr; }
+    .table-header, .table-row { grid-template-columns: 1fr; }
+    .th.category, .cell.cat-cell { display: none; }
+    .value-grid { grid-template-columns: 1fr; }
+    .container { padding: 40px 24px; }
+    .hero { padding: 60px 24px 50px; }
+    footer { flex-direction: column; gap: 12px; padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-meta">
+    <span class="hero-badge">기술 비교 보고서</span>
+
+  </div>
+  <h1>디스펙터 <em>AI 엣지디바이스</em> vs<br>관리용 SW/서버 기술 비교</h1>
+  <p class="hero-sub">Vrain-X (On-device 현장 두뇌) vs. AI-GCS (지능형 통합 관제 플랫폼)</p>
+</div>
+
+<!-- SUMMARY STRIP -->
+<div class="summary-strip">
+  <div class="summary-card edge">
+    <div class="summary-label">AI 엣지디바이스</div>
+    <div class="summary-title">
+      Vrain-X
+      <small>On-device · 현장 실행형 두뇌</small>
+    </div>
+    <p class="summary-desc">
+      로봇에 <strong>직접 탑재</strong>되어 현장에서 즉각적인 연산을 수행합니다.
+      서버 미연결 상황에서도 실시간 인지·판단·제어를 독자적으로 수행하여 험지 보행 능력을 극대화합니다.
+    </p>
+  </div>
+  <div class="summary-card gcs">
+    <div class="summary-label">관리용 SW/서버</div>
+    <div class="summary-title">
+      AI-GCS
+      <small>AI Ground Control System · 지상 관제 시스템</small>
+    </div>
+    <p class="summary-desc">
+      원격지에서 <strong>다수의 로봇을 한눈에</strong> 파악하고 통제하는 지능형 통합 관제 플랫폼입니다.
+      운영 시나리오 설계, 데이터 축적, OTA 업데이트를 통해 로봇 생태계를 총괄합니다.
+    </p>
+  </div>
+</div>
+
+<!-- MAIN COMPARISON TABLE -->
+<div class="container">
+  <div class="section-label">핵심 비교</div>
+  <div class="section-title">항목별 상세 비교 분석</div>
+
+  <div class="table-header">
+    <div class="th category">비교 항목</div>
+    <div class="th edge">🤖 AI 엣지디바이스 (Vrain-X)</div>
+    <div class="th gcs">🖥 관리용 SW/서버 (AI-GCS)</div>
+    <div class="th ref">근거자료</div>
+  </div>
+
+  <!-- Row 1: 개념 -->
+  <div class="table-row">
+    <div class="cell cat-cell">
+      <span class="cat-number">01</span>
+      <span class="cat-name">개념</span>
+    </div>
+    <div class="cell edge-cell">
+      <div class="tag">On-device</div>
+      <p>로봇에 직접 탑재되어 현장에서 즉각적인 연산을 수행하는 <span class="keyword">'현장 실행형 두뇌'</span>입니다.</p>
+    </div>
+    <div class="cell gcs-cell">
+      <div class="tag">Remote Control</div>
+      <p>원격지에서 다수의 로봇을 한눈에 파악하고 통제하는 <span class="keyword">'지능형 통합 관제 플랫폼 및 서버'</span>입니다.</p>
+    </div>
+    <div class="cell ref-cell">[1]p1, [1]p5, [2], [3]</div>
+  </div>
+
+  <!-- Row 2: 주요 역할 -->
+  <div class="table-row">
+    <div class="cell cat-cell">
+      <span class="cat-number">02</span>
+      <span class="cat-name">주요 역할</span>
+    </div>
+    <div class="cell edge-cell">
+      <p>실시간 <span class="keyword">인지–판단–제어</span>에 집중하여 험지 보행 능력을 극대화합니다.</p>
+    </div>
+    <div class="cell gcs-cell">
+      <p>운영 시나리오 설계 및 수집된 주행 데이터를 통한 <span class="keyword">사업화 모델 분석</span>에 집중합니다.</p>
+    </div>
+    <div class="cell ref-cell">[1]p2, [1]p5, [2], [3]</div>
+  </div>
+
+  <!-- Row 3: 핵심 기능 -->
+  <div class="table-row">
+    <div class="cell cat-cell">
+      <span class="cat-number">03</span>
+      <span class="cat-name">핵심 기능</span>
+    </div>
+    <div class="cell edge-cell">
+      <ul>
+        <li>험지 보행 및 장애물 회피 알고리즘을 <span class="keyword">로봇 내부에서 단독 구동</span>합니다.</li>
+        <li>대용량 센서 데이터를 실시간 처리하여 <span class="keyword">서버 미연결 시에도 안전 주행을 유지</span>합니다.</li>
+      </ul>
+    </div>
+    <div class="cell gcs-cell">
+      <ul>
+        <li>지도 기반 경로(<span class="keyword">Waypoint</span>) 설정, 실시간 모니터링 및 주행 로그를 수집합니다.</li>
+        <li>무선 업데이트(<span class="keyword">OTA</span>)를 통해 로봇 시스템을 원격으로 최적화합니다.</li>
+      </ul>
+    </div>
+    <div class="cell ref-cell">[1]p2, [1]p3, [1]p5, [1]p10, [2], [3]</div>
+  </div>
+
+  <!-- Row 4: 물리적 위치 -->
+  <div class="table-row">
+    <div class="cell cat-cell">
+      <span class="cat-number">04</span>
+      <span class="cat-name">물리적 위치</span>
+    </div>
+    <div class="cell edge-cell">
+      <p>로봇 본체 파워와 연결되어 <span class="keyword">내부에 일체형으로 탑재</span>되는 온디바이스(On-device) 형태입니다.</p>
+    </div>
+    <div class="cell gcs-cell">
+      <p>원격 클라우드 서버 또는 관리용으로 구축된 <span class="keyword">별도의 중앙 서버 시스템</span>에 위치합니다.</p>
+    </div>
+    <div class="cell ref-cell">[1]p1, [1]p5, [2], [3]</div>
+  </div>
+
+  <!-- Row 5: 사업적 가치 – 안전/신뢰성 -->
+  <div class="table-row">
+    <div class="cell cat-cell">
+      <span class="cat-number">05</span>
+      <span class="cat-name">사업적 가치: 안전/신뢰성</span>
+    </div>
+    <div class="cell edge-cell">
+      <ul>
+        <li><span class="keyword">실시간 안전:</span> 고경사(20°~25°) 등 극한 지형에서 즉각 제어로 전도를 방지합니다.</li>
+        <li><span class="keyword">물리 내구성:</span> 야외 환경에 최적화된 하드웨어로 유지보수 소요를 낮춥니다.</li>
+      </ul>
+    </div>
+    <div class="cell gcs-cell">
+      <ul>
+        <li><span class="keyword">라이프사이클:</span> 원격 진단으로 현장 방문 없이 AS 비용을 최소화합니다.</li>
+        <li><span class="keyword">위험 대응:</span> 구조 요청 인식 시 서버를 통해 외부 안전망과 즉시 연동합니다.</li>
+      </ul>
+    </div>
+    <div class="cell ref-cell">[1]p3, [1]p5, [1]p8, [1]p10, [2], [3]</div>
+  </div>
+
+  <!-- Row 6: 사업적 가치 – 데이터/확장성 -->
+  <div class="table-row">
+    <div class="cell cat-cell">
+      <span class="cat-number">06</span>
+      <span class="cat-name">사업적 가치: 데이터/확장성</span>
+    </div>
+    <div class="cell edge-cell">
+      <ul>
+        <li><span class="keyword">현장 인지:</span> 실시간 지형 데이터를 생성하여 로봇의 물리적 대응력을 높이는 기초가 됩니다.</li>
+      </ul>
+    </div>
+    <div class="cell gcs-cell">
+      <ul>
+        <li><span class="keyword">데이터 자산:</span> 슬립율(Slip Ratio) 등 축적 데이터를 통해 독보적인 보행 알고리즘 자산을 형성합니다.</li>
+        <li><span class="keyword">운영 확장:</span> 600대 규모 보급 시 서버 기반 관제로 인건비를 절감합니다.</li>
+      </ul>
+    </div>
+    <div class="cell ref-cell">[1]p2, [1]p5, [1]p10, [2], [3]</div>
+  </div>
+
+  <!-- VALUE SECTION -->
+  <div class="value-section">
+    <div class="section-label">사업적 가치 요약</div>
+    <div class="section-title">두 시스템의 핵심 강점</div>
+
+    <div class="value-grid">
+      <!-- Edge Value -->
+      <div class="value-group">
+        <div class="value-group-header edge">
+          <div class="value-group-icon">🤖</div>
+          <div class="value-group-title">
+            AI 엣지디바이스 (Vrain-X)
+            <small>On-device 현장 두뇌</small>
+          </div>
+        </div>
+        <div class="value-items edge">
+          <div class="value-item">
+            <div class="value-item-title">
+              <span class="dot"></span>실시간 안전 보장
+            </div>
+            <p>고경사 20°~25° 극한 지형에서 <strong>즉각 제어</strong>로 전도 위험을 원천 방지합니다.</p>
+          </div>
+          <div class="value-item">
+            <div class="value-item-title">
+              <span class="dot"></span>네트워크 독립성
+            </div>
+            <p>서버 미연결 환경에서도 <strong>자율적 안전 주행</strong>을 완전히 유지합니다.</p>
+          </div>
+          <div class="value-item">
+            <div class="value-item-title">
+              <span class="dot"></span>물리 내구성
+            </div>
+            <p>야외 최적화 하드웨어로 <strong>유지보수 비용</strong>을 구조적으로 절감합니다.</p>
+          </div>
+          <div class="value-item">
+            <div class="value-item-title">
+              <span class="dot"></span>현장 데이터 생성
+            </div>
+            <p>실시간 지형 데이터를 생성하여 <strong>알고리즘 자산</strong> 형성의 기초가 됩니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- GCS Value -->
+      <div class="value-group">
+        <div class="value-group-header gcs">
+          <div class="value-group-icon">🖥</div>
+          <div class="value-group-title">
+            관리용 SW/서버 (AI-GCS)
+            <small>지능형 통합 관제 플랫폼</small>
+          </div>
+        </div>
+        <div class="value-items gcs">
+          <div class="value-item">
+            <div class="value-item-title">
+              <span class="dot"></span>라이프사이클 관리
+            </div>
+            <p>원격 진단·OTA 업데이트로 <strong>현장 방문 없이</strong> AS 비용을 최소화합니다.</p>
+          </div>
+          <div class="value-item">
+            <div class="value-item-title">
+              <span class="dot"></span>데이터 자산 구축
+            </div>
+            <p>슬립율 등 주행 데이터를 축적하여 <strong>독보적인 보행 알고리즘</strong> 자산을 형성합니다.</p>
+          </div>
+          <div class="value-item">
+            <div class="value-item-title">
+              <span class="dot"></span>위험 대응 네트워크
+            </div>
+            <p>구조 요청 인식 시 <strong>외부 안전망과 즉시 연동</strong>하는 통합 위험 관리 체계입니다.</p>
+          </div>
+          <div class="value-item">
+            <div class="value-item-title">
+              <span class="dot"></span>운영 확장성
+            </div>
+            <p>600대 규모 보급 시 <strong>서버 기반 관제로 인건비</strong>를 획기적으로 절감합니다.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFERENCES -->
+  <div class="ref-section">
+    <div class="section-label">근거자료</div>
+    <div class="section-title" style="margin-bottom: 0; font-size: 28px;">참고문헌</div>
+    <ul class="ref-list">
+      <li>
+        <span class="ref-num">[1]</span>
+        <span>(주)디스펙터(음병찬), "[제안서-1단계] 비앤비스틸_카우봇 사업_실증 프로젝트_v1.5," 2025.12.02.</span>
+      </li>
+      <li>
+        <span class="ref-num">[2]</span>
+        <span>(주)디스펙터 공식 웹사이트, "AI 엣지 디바이스 및 Physical AI 솔루션 소개," 2026.02.20 접속, <a href="https://www.dspecter.com/" target="_blank">https://www.dspecter.com/</a></span>
+      </li>
+      <li>
+        <span class="ref-num">[3]</span>
+        <span>(주)디스펙터 공식 웹사이트, "지능형 로봇 운영 플랫폼 및 AI-GCS 기능 안내," 2026.02.20 접속, <a href="https://www.dspecter.com/solutions" target="_blank">https://www.dspecter.com/solutions</a></span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="left">디스펙터 기술 비교 보고서</div>
+  <div class="right">디스펙터 기술 비교 보고서 · Confidential</div>
+</footer>
+
+</body>
+</html>
