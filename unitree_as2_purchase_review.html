@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>유니트리 As2 구매 검토서</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@600;700;800;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f4f0;
+  --white: #ffffff;
+  --as2-col: #1a3a2a;
+  --as2-light: #e8f4ee;
+  --as2-mid: #2d7a4f;
+  --b2-col: #0f3d5c;
+  --b2-light: #e8f2f9;
+  --b2-mid: #1a6496;
+  --accent: #c8a96e;
+  --accent2: #7eb8a4;
+  --danger: #c0392b;
+  --danger-light: #fbeae8;
+  --warning: #b8860b;
+  --warning-light: #fef9e7;
+  --success: #27734a;
+  --success-light: #e8f4ee;
+  --text: #1a1a1a;
+  --muted: #555555;
+  --border: #e0ddd6;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,0.14);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 20px;
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Hero ── */
+.hero {
+  background: linear-gradient(135deg, #0e0e0e 0%, #1a2a20 50%, #0e0e0e 100%);
+  padding: 80px 60px 70px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(200,169,110,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero::after {
+  content: 'As2';
+  position: absolute;
+  right: 60px;
+  bottom: -30px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 200px;
+  color: rgba(255,255,255,0.03);
+  line-height: 1;
+}
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.hero-badge {
+  background: var(--accent);
+  color: #fff;
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 6px 18px;
+  border-radius: 20px;
+}
+.hero-date {
+  color: rgba(255,255,255,0.45);
+  font-size: 18px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+}
+.hero h1 {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 900;
+  font-size: clamp(38px, 5.5vw, 62px);
+  color: #e8e2d9;
+  line-height: 1.3;
+  max-width: 800px;
+  position: relative;
+  z-index: 1;
+}
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero-sub {
+  margin-top: 16px;
+  color: rgba(255,255,255,0.5);
+  font-size: 21px;
+  font-weight: 400;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Container & Sections ── */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 60px;
+}
+.section {
+  margin-top: 48px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 48px 48px 52px;
+  box-shadow: var(--shadow);
+}
+.section-label {
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-label::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--accent);
+}
+.section h2 {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 900;
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.35;
+  margin-bottom: 12px;
+}
+.section h2 em { font-style: normal; color: var(--accent); }
+.section-desc {
+  font-size: 20px;
+  color: var(--muted);
+  margin-bottom: 36px;
+  max-width: 800px;
+  line-height: 1.85;
+}
+h3.sub-title {
+  font-weight: 700;
+  font-size: clamp(22px, 3vw, 28px);
+  line-height: 1.4;
+  margin-top: 44px;
+  margin-bottom: 20px;
+  padding-left: 16px;
+  border-left: 4px solid var(--accent);
+}
+
+/* ── Core Question Box ── */
+.core-question {
+  background: linear-gradient(135deg, rgba(200,169,110,0.08), rgba(126,184,164,0.06));
+  border: 1px solid rgba(200,169,110,0.25);
+  border-radius: 14px;
+  padding: 28px 32px;
+  margin-bottom: 36px;
+  font-size: 20px;
+  line-height: 1.85;
+}
+.core-question .q-badge {
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* ── Grid Table ── */
+.table-header {
+  display: grid;
+  grid-template-columns: 200px 1fr 1fr 1fr;
+  gap: 2px;
+  margin-bottom: 2px;
+}
+.th {
+  padding: 18px 24px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 8px 8px 0 0;
+  color: #fff;
+}
+.th.category { background: var(--text); }
+.th.as2-h { background: var(--as2-col); }
+.th.b2-h { background: var(--b2-col); }
+.th.note-h { background: #6b6b6b; }
+
+.table-row {
+  display: grid;
+  grid-template-columns: 200px 1fr 1fr 1fr;
+  gap: 2px;
+  margin-bottom: 2px;
+  animation: fadeUp 0.4s ease both;
+}
+.table-row:nth-child(1) { animation-delay: 0.05s; }
+.table-row:nth-child(2) { animation-delay: 0.10s; }
+.table-row:nth-child(3) { animation-delay: 0.15s; }
+.table-row:nth-child(4) { animation-delay: 0.18s; }
+.table-row:nth-child(5) { animation-delay: 0.21s; }
+.table-row:nth-child(6) { animation-delay: 0.24s; }
+.table-row:nth-child(7) { animation-delay: 0.27s; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.cell {
+  background: var(--white);
+  padding: 24px 24px;
+  font-size: 19px;
+  line-height: 1.75;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.table-row:hover .cell {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+.cell.cat-cell {
+  background: var(--text);
+  display: flex;
+  align-items: center;
+}
+.cat-number {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 40px;
+  color: rgba(255,255,255,0.12);
+  line-height: 1;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+.cat-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.4;
+}
+.cell.as2-cell {
+  background: var(--as2-light);
+  border-left: 3px solid var(--as2-mid);
+}
+.cell.b2-cell {
+  background: var(--b2-light);
+  border-left: 3px solid var(--b2-mid);
+}
+.cell.note-cell {
+  background: #f8f7f4;
+  border-left: 3px solid #ccc;
+  font-size: 18px;
+  color: var(--muted);
+}
+.cell .tag {
+  display: inline-block;
+  font-family: 'Nunito', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+.as2-cell .tag { background: var(--as2-col); color: #fff; }
+.cell .keyword { font-weight: 700; }
+.as2-cell .keyword { color: var(--as2-col); }
+
+/* ── Standard Table ── */
+.std-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 3px;
+  margin: 24px 0 32px;
+}
+.std-table thead th {
+  padding: 16px 22px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  text-align: left;
+  color: #fff;
+  background: var(--text);
+}
+.std-table thead th:first-child { border-radius: 10px 0 0 10px; }
+.std-table thead th:last-child { border-radius: 0 10px 10px 0; }
+.std-table td {
+  padding: 20px 22px;
+  font-size: 19px;
+  background: var(--white);
+  vertical-align: top;
+  line-height: 1.8;
+}
+.std-table td:first-child {
+  font-weight: 700;
+  font-size: 18px;
+  background: #fafaf8;
+  border-left: 3px solid var(--border);
+}
+
+/* ── Verdict Box (dark) ── */
+.verdict-box {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a3a 100%);
+  border-radius: 16px;
+  padding: 44px 48px;
+  margin: 36px 0;
+  color: #fff;
+  box-shadow: var(--shadow-lg);
+}
+.verdict-box h3 {
+  font-family: 'Nunito', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: var(--accent);
+}
+.verdict-box .verdict-subtitle {
+  font-size: 18px;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 28px;
+}
+.verdict-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.verdict-col {
+  background: rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 28px 28px 24px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.verdict-col h4 {
+  font-family: 'Nunito', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+}
+.verdict-col h4 .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.verdict-col ul {
+  list-style: none;
+  padding: 0;
+}
+.verdict-col ul li {
+  font-size: 18px;
+  line-height: 1.9;
+  color: rgba(255,255,255,0.82);
+  padding-left: 20px;
+  position: relative;
+  margin-bottom: 6px;
+}
+.verdict-col ul li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: rgba(255,255,255,0.35);
+}
+.verdict-summary {
+  margin-top: 24px;
+  padding: 20px 28px;
+  background: rgba(200,169,110,0.1);
+  border: 1px solid rgba(200,169,110,0.2);
+  border-radius: 10px;
+  font-size: 19px;
+  line-height: 1.85;
+  color: rgba(255,255,255,0.88);
+}
+.verdict-summary strong { color: var(--accent); }
+
+/* ── Verdict Inline (for section conclusions) ── */
+.verdict-inline {
+  background: linear-gradient(135deg, #1a1a1a 0%, #1a2a20 100%);
+  border-radius: 14px;
+  padding: 32px 36px;
+  margin: 32px 0;
+  color: #fff;
+  box-shadow: var(--shadow);
+}
+.verdict-inline h4 {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+.verdict-inline p {
+  font-size: 19px;
+  line-height: 1.85;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 10px;
+}
+.verdict-inline p:last-child { margin-bottom: 0; }
+.verdict-inline strong { color: #fff; }
+.verdict-inline em { font-style: normal; color: var(--accent); }
+
+/* ── Note Box ── */
+.note-box {
+  background: var(--white);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 10px 10px 0;
+  padding: 24px 32px;
+  margin: 24px 0;
+  font-size: 19px;
+  color: var(--muted);
+  line-height: 1.85;
+}
+.note-box strong { color: var(--text); }
+.note-box.green { border-left-color: var(--as2-mid); }
+.note-box.red { border-left-color: var(--danger); }
+
+/* ── Badges ── */
+.badge {
+  display: inline-block;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 14px;
+  letter-spacing: 0.04em;
+}
+.badge-low { background: var(--success-light); color: var(--success); }
+.badge-mid { background: var(--warning-light); color: var(--warning); }
+.badge-high { background: var(--danger-light); color: var(--danger); }
+.badge-na { background: #f0ede6; color: #999; }
+
+/* ── Business Model Cards ── */
+.model-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin: 28px 0;
+}
+.model-card {
+  background: var(--white);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  transition: transform 0.2s;
+}
+.model-card:hover { transform: translateY(-3px); }
+.model-card-header {
+  padding: 22px 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.model-card-header.a { background: var(--as2-col); }
+.model-card-header.b { background: var(--b2-col); }
+.model-card-header.c { background: #4a3a1a; }
+.model-card-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+.model-card-label {
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+}
+.model-card-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+}
+.model-card-body { padding: 28px 28px 32px; }
+.model-row {
+  display: flex;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0ede6;
+  font-size: 18px;
+  line-height: 1.75;
+}
+.model-row:last-child { border-bottom: none; }
+.model-row-label {
+  font-weight: 700;
+  color: var(--accent);
+  min-width: 110px;
+  flex-shrink: 0;
+  font-size: 17px;
+}
+.model-row-value { color: var(--text); }
+
+/* ── Strength Grid ── */
+.strength-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 24px 0;
+}
+.strength-item {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 24px 28px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  transition: transform 0.2s;
+}
+.strength-item:hover { transform: translateY(-2px); }
+.strength-num {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: #fff;
+  background: var(--as2-mid);
+  min-width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.strength-text {
+  font-size: 18px;
+  line-height: 1.75;
+}
+.strength-text strong { color: var(--as2-col); }
+
+/* ── Risk Table ── */
+.risk-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 3px;
+  margin: 24px 0;
+}
+.risk-table thead th {
+  padding: 16px 22px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  text-align: left;
+  color: #fff;
+  background: #8b4513;
+}
+.risk-table thead th:first-child { border-radius: 10px 0 0 10px; }
+.risk-table thead th:last-child { border-radius: 0 10px 10px 0; }
+.risk-table td {
+  padding: 18px 22px;
+  font-size: 18px;
+  background: var(--white);
+  vertical-align: top;
+  line-height: 1.8;
+}
+.risk-table td:first-child {
+  font-weight: 700;
+  background: #fef9f0;
+  border-left: 3px solid #d4a050;
+}
+
+/* ── Final Summary Table ── */
+.final-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+  margin: 24px 0;
+}
+.final-table th {
+  font-family: 'Nunito', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--muted);
+  text-align: left;
+  padding: 10px 22px;
+}
+.final-table td {
+  padding: 22px 22px;
+  background: var(--white);
+  font-size: 19px;
+  line-height: 1.75;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.final-table td:first-child {
+  border-radius: 10px 0 0 10px;
+  font-weight: 700;
+}
+.final-table td:last-child { border-radius: 0 10px 10px 0; }
+
+/* ── Action List ── */
+.action-list {
+  list-style: none;
+  margin: 24px 0;
+  padding: 0;
+  counter-reset: action;
+}
+.action-list li {
+  counter-increment: action;
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 20px;
+  line-height: 1.8;
+}
+.action-list li:last-child { border-bottom: none; }
+.action-list li::before {
+  content: counter(action);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  color: #fff;
+  background: var(--accent);
+  min-width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── Footer ── */
+footer {
+  margin-top: 80px;
+  padding: 36px 60px;
+  border-top: 1px solid var(--border);
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  letter-spacing: 0.04em;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .hero { padding: 50px 28px 40px; }
+  .container { padding: 0 28px; }
+  .section { padding: 32px 24px 36px; }
+  .table-header, .table-row { grid-template-columns: 1fr; }
+  .th.category, .cell.cat-cell { display: none; }
+  .verdict-grid { grid-template-columns: 1fr; }
+  .model-grid { grid-template-columns: 1fr; }
+  .strength-grid { grid-template-columns: 1fr; }
+  .std-table, .risk-table, .final-table { display: block; overflow-x: auto; }
+  footer { padding: 24px 28px; flex-direction: column; gap: 8px; }
+}
+@media (max-width: 640px) {
+  .hero h1 { font-size: 28px; }
+  .model-row { flex-direction: column; }
+  .model-row-label { min-width: unset; margin-bottom: 2px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- HERO                                              -->
+<!-- ══════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-meta">
+    <span class="hero-badge">Purchase Review</span>
+    <span class="hero-date">2025</span>
+  </div>
+  <h1>유니트리 <em>As2</em> 구매 검토서</h1>
+  <p class="hero-sub">As2 구매를 통한 B2 기능 확장 가능성 및 As2 단독 사업 타당성 분석</p>
+</section>
+
+<div class="container">
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 1: As2 vs B2 기능 비교                     -->
+<!-- ══════════════════════════════════════════════════ -->
+<section class="section">
+  <span class="section-label">검토 1-1 — 기능 비교</span>
+  <h2>As2에만 있고 <em>B2에 없는</em> 기능</h2>
+
+  <div class="core-question">
+    <span class="q-badge">핵심 질문</span>
+    As2(EDU)를 구매하여 As2가 지원하는 기능들을 검토하고, 이를 B2 개발에 활용하면 — 기존에 B2가 지원하지 않던 기능들이 As2 구매를 통해 <strong>단기간에 B2에 추가될 수 있는가?</strong>
+  </div>
+
+  <div class="table-header">
+    <div class="th category">기능</div>
+    <div class="th as2-h">As2</div>
+    <div class="th b2-h">B2</div>
+    <div class="th note-h">비고</div>
+  </div>
+
+  <div class="table-row">
+    <div class="cell cat-cell"><span class="cat-number">01</span><span class="cat-name">ISS 3.0<br>지능형 팔로우</span></div>
+    <div class="cell as2-cell"><span class="tag">PRO / EDU</span><br><span class="keyword">탑재</span></div>
+    <div class="cell b2-cell"><span class="keyword" style="color:#999">미탑재</span></div>
+    <div class="cell note-cell">UWB+비전 퓨전, 센티미터급 정밀 추종</div>
+  </div>
+  <div class="table-row">
+    <div class="cell cat-cell"><span class="cat-number">02</span><span class="cat-name">스피커<br>마이크</span></div>
+    <div class="cell as2-cell"><span class="tag">전 모델</span><br><span class="keyword">탑재</span></div>
+    <div class="cell b2-cell"><span class="keyword" style="color:#999">미탑재</span></div>
+    <div class="cell note-cell">음성 경고, 양방향 통신, AI 음성 인식 연동</div>
+  </div>
+  <div class="table-row">
+    <div class="cell cat-cell"><span class="cat-number">03</span><span class="cat-name">전방 조명</span></div>
+    <div class="cell as2-cell"><span class="tag">전 모델</span><br><span class="keyword">탑재</span></div>
+    <div class="cell b2-cell"><span class="keyword" style="color:#999">미탑재</span></div>
+    <div class="cell note-cell">야간 순찰, 카메라 보조광, 존재감 표시</div>
+  </div>
+  <div class="table-row">
+    <div class="cell cat-cell"><span class="cat-number">04</span><span class="cat-name">Wi-Fi 6<br>Bluetooth 5.2</span></div>
+    <div class="cell as2-cell"><span class="tag">전 모델</span><br><span class="keyword">탑재</span></div>
+    <div class="cell b2-cell"><span class="keyword" style="color:#999">미탑재</span></div>
+    <div class="cell note-cell">무선 데이터 전송, IoT 기기 연동</div>
+  </div>
+  <div class="table-row">
+    <div class="cell cat-cell"><span class="cat-number">05</span><span class="cat-name">GPS / 4G</span></div>
+    <div class="cell as2-cell"><span class="tag">PRO / EDU</span><br><span class="keyword">탑재</span></div>
+    <div class="cell b2-cell"><span class="keyword" style="color:#999">미탑재</span></div>
+    <div class="cell note-cell">야외 측위, 원격 통신</div>
+  </div>
+  <div class="table-row">
+    <div class="cell cat-cell"><span class="cat-number">06</span><span class="cat-name">자동 충전<br>도크</span></div>
+    <div class="cell as2-cell"><span class="tag">EDU</span><br><span class="keyword">포함</span></div>
+    <div class="cell b2-cell"><span class="keyword" style="color:#999">미포함</span></div>
+    <div class="cell note-cell">무인 장시간 자율 운용의 핵심</div>
+  </div>
+  <div class="table-row">
+    <div class="cell cat-cell"><span class="cat-number">07</span><span class="cat-name">UniStore<br>앱 마켓</span></div>
+    <div class="cell as2-cell"><span class="tag">전 모델</span><br><span class="keyword">지원</span></div>
+    <div class="cell b2-cell"><span class="keyword" style="color:#999">미지원</span></div>
+    <div class="cell note-cell">앱 설치로 기능 즉시 확장</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 2: 이식 가능성 분석                        -->
+<!-- ══════════════════════════════════════════════════ -->
+<section class="section">
+  <span class="section-label">검토 1-2 — 이식 가능성</span>
+  <h2>위 기능들을 실제로 <em>B2에 옮길 수 있는가?</em></h2>
+  <p class="section-desc">7가지 기능을 "As2를 사서 분석한 뒤 B2에 옮긴다"는 관점에서 분석하면, <strong>As2를 구매한다고 해서 곧바로 B2에 이식할 수 있는 기능은 없습니다.</strong></p>
+
+  <h3 class="sub-title">As2를 구매해도 B2에 이식할 수 없는 기능 (3가지)</h3>
+
+  <div class="note-box red">
+    아래 3가지 기능은 As2의 핵심 차별 기능이지만, <strong>구매해도 B2로 이식이 불가능</strong>합니다.
+  </div>
+
+  <table class="std-table">
+    <thead>
+      <tr><th>기능</th><th>이식 불가 사유</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>ISS 3.0 팔로우</td>
+        <td>Unitree 자체 개발 <strong>비공개 소프트웨어</strong>. As2를 구매해도 소스코드에 접근할 수 없으므로 B2로 옮길 수 없음. 유사 기능을 원한다면 UWB+비전 퓨전 알고리즘을 자체 개발해야 하며(3~6개월), 이는 As2 구매와 무관한 별도 개발 프로젝트</td>
+      </tr>
+      <tr>
+        <td>자동 충전 도크</td>
+        <td>As2용 도크는 <strong>18kg 로봇에 맞춰 설계</strong>. B2(60kg)에는 물리적으로 사용 불가. B2용 도크를 원한다면 별도 하드웨어 설계·제작이 필요하며(3~6개월), 이 역시 As2 구매와 무관</td>
+      </tr>
+      <tr>
+        <td>UniStore 앱 마켓</td>
+        <td><strong>As2 플랫폼 전용</strong>. B2는 지원 대상이 아니므로 구조적으로 이식 불가</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-title">As2 없이도 B2에 직접 추가할 수 있는 기능 (4가지)</h3>
+
+  <div class="note-box green">
+    아래 4가지 기능은 B2에 추가할 수 있지만, <strong>As2를 구매하지 않아도 외장 모듈을 직접 구매·부착하면 동일하게 구현</strong>할 수 있습니다.
+  </div>
+
+  <table class="std-table">
+    <thead>
+      <tr><th>기능</th><th>B2 직접 추가 방법</th><th>난이도</th><th>소요 기간</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>스피커 / 마이크</td>
+        <td>외장 스피커·마이크를 B2에 부착 + SDK로 제어 연동</td>
+        <td><span class="badge badge-low">낮음</span></td>
+        <td>2~4주</td>
+      </tr>
+      <tr>
+        <td>전방 조명</td>
+        <td>LED 조명 모듈 외장 장착 + GPIO/전원 출력 포트 제어 (B2: 12V×4, 5V×1 보유)</td>
+        <td><span class="badge badge-low">낮음</span></td>
+        <td>1~2주</td>
+      </tr>
+      <tr>
+        <td>Wi-Fi / BT 모듈</td>
+        <td>Wi-Fi/BT USB 동글 장착 (B2: USB 3.0 ×4 보유) + 드라이버 설정</td>
+        <td><span class="badge badge-low">낮음~중간</span></td>
+        <td>2~4주</td>
+      </tr>
+      <tr>
+        <td>GPS / 4G</td>
+        <td>GPS/4G 외장 모듈 + 안테나 배치 + 통신 SW 개발</td>
+        <td><span class="badge badge-mid">중간</span></td>
+        <td>4~6주</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 3: 검토 1 결론                             -->
+<!-- ══════════════════════════════════════════════════ -->
+<section class="section">
+  <span class="section-label">검토 1 — 결론</span>
+  <h2>As2를 구매하면 B2 기능이 <em>확장되는가?</em></h2>
+
+  <div class="verdict-box">
+    <h3>결론: As2를 구매한다고 해서 B2의 활용 영역이 단기간에 확장되지는 않습니다.</h3>
+    <p class="verdict-subtitle">7가지 기능 모두 "As2 구매"가 B2 기능 확장의 필수 조건이 되지 않습니다.</p>
+
+    <div class="verdict-grid">
+      <div class="verdict-col">
+        <h4><span class="dot" style="background:var(--danger)"></span> 핵심 기능 3가지 — 이식 불가</h4>
+        <ul>
+          <li><strong>ISS 3.0</strong> — 비공개 SW, 소스 접근 불가</li>
+          <li><strong>자동 충전 도크</strong> — 18kg용, B2(60kg)에 물리적 호환 불가</li>
+          <li><strong>UniStore</strong> — As2 전용, B2 미지원</li>
+        </ul>
+      </div>
+      <div class="verdict-col">
+        <h4><span class="dot" style="background:var(--as2-mid)"></span> 부가 기능 4가지 — As2 없이도 가능</h4>
+        <ul>
+          <li><strong>스피커·마이크</strong> — 외장 부착 (2~4주)</li>
+          <li><strong>전방 조명</strong> — LED 모듈 장착 (1~2주)</li>
+          <li><strong>Wi-Fi/BT</strong> — USB 동글 장착 (2~4주)</li>
+          <li><strong>GPS/4G</strong> — 외장 모듈 장착 (4~6주)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="verdict-summary">
+      As2를 구매하는 것 자체가 B2의 기능을 자동으로 확장해주는 것은 아닙니다. As2와 B2는 <strong>서로 다른 하드웨어 플랫폼</strong>이므로 기능 이식에는 별도의 개발이 반드시 수반됩니다. "B2 기능 확장"만이 목적이라면, As2 구매보다 <strong>필요한 외장 모듈을 직접 구매하여 B2에 적용하는 것이 더 효율적</strong>입니다.
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 4: As2 단독 사업 모델                      -->
+<!-- ══════════════════════════════════════════════════ -->
+<section class="section">
+  <span class="section-label">검토 2-1 — 단독 사업 모델</span>
+  <h2>As2(EDU) <em>단독 사업</em> 가능성 분석</h2>
+
+  <div class="core-question">
+    <span class="q-badge">핵심 질문</span>
+    B2와 별개로, As2(EDU)만으로 <strong>독자적인 사업을 구성할 수 있는가?</strong>
+  </div>
+
+  <div class="model-grid">
+    <!-- Model A -->
+    <div class="model-card">
+      <div class="model-card-header a">
+        <div class="model-card-icon">🛡</div>
+        <div>
+          <div class="model-card-label">Model A</div>
+          <div class="model-card-title">보안 / 순찰 솔루션</div>
+        </div>
+      </div>
+      <div class="model-card-body">
+        <div class="model-row"><div class="model-row-label">타겟 고객</div><div class="model-row-value">물류센터, 공장, 아파트 단지, 데이터센터, 공공시설</div></div>
+        <div class="model-row"><div class="model-row-label">핵심 기능</div><div class="model-row-value">ISS 3.0 팔로우 + 스피커/마이크(음성 경고) + 전방 조명(야간) + GPS/4G(위치 추적) + 자동 충전 도크(24시간 운용)</div></div>
+        <div class="model-row"><div class="model-row-label">As2 강점</div><div class="model-row-value">18kg 경량 실내·외 겸용, IP54 방수, 음성 경고·조명 침입 억제, 자동 충전 무인 순찰</div></div>
+        <div class="model-row"><div class="model-row-label">수익 구조</div><div class="model-row-value">로봇 판매 + 순찰 SW 라이센스 + 월정 관제 서비스</div></div>
+      </div>
+    </div>
+
+    <!-- Model B -->
+    <div class="model-card">
+      <div class="model-card-header b">
+        <div class="model-card-icon">🔍</div>
+        <div>
+          <div class="model-card-label">Model B</div>
+          <div class="model-card-title">산업시설 점검 솔루션</div>
+        </div>
+      </div>
+      <div class="model-card-body">
+        <div class="model-row"><div class="model-row-label">타겟 고객</div><div class="model-row-value">발전소, 화학 플랜트, 제조 공장, 건설 현장</div></div>
+        <div class="model-row"><div class="model-row-label">핵심 기능</div><div class="model-row-value">LiDAR(64~128선) + HD 카메라 + Jetson Orin NX(AI 추론) + 4G(원격 전송) + 자동 충전 도크(무인 점검)</div></div>
+        <div class="model-row"><div class="model-row-label">As2 강점</div><div class="model-row-value">EDU Jetson 확장으로 열화상/가스 감지 센서 통합. SDK 2차 개발 커스터마이징. 매일 무인 점검 루틴</div></div>
+        <div class="model-row"><div class="model-row-label">수익 구조</div><div class="model-row-value">로봇 + 센서 패키지 판매 + 점검 SW 라이센스 + 데이터 분석 서비스</div></div>
+        <div class="model-row"><div class="model-row-label">시장 대비</div><div class="model-row-value">기존 점검 시스템 대당 2~5억원 대비 대폭 낮은 도입 비용 → 가격 경쟁력</div></div>
+      </div>
+    </div>
+
+    <!-- Model C -->
+    <div class="model-card">
+      <div class="model-card-header c">
+        <div class="model-card-icon">🤝</div>
+        <div>
+          <div class="model-card-label">Model C</div>
+          <div class="model-card-title">작업자 동행 / 물류 보조</div>
+        </div>
+      </div>
+      <div class="model-card-body">
+        <div class="model-row"><div class="model-row-label">타겟 고객</div><div class="model-row-value">대형 물류센터, 병원, 대규모 건설 현장</div></div>
+        <div class="model-row"><div class="model-row-label">핵심 기능</div><div class="model-row-value">ISS 3.0 팔로우(작업자 추종) + 15kg 적재(공구/자재 운반) + 스피커/마이크(작업 지시 확인)</div></div>
+        <div class="model-row"><div class="model-row-label">As2 강점</div><div class="model-row-value">센티미터급 작업자 추종 물품 운반, 스피커 작업 지시 안내, 18kg 경량 엘리베이터 탑승 가능</div></div>
+        <div class="model-row"><div class="model-row-label">수익 구조</div><div class="model-row-value">로봇 렌탈/판매 + 동행 솔루션 SW + 유지보수</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 5: 강점                                    -->
+<!-- ══════════════════════════════════════════════════ -->
+<section class="section">
+  <span class="section-label">검토 2-2 — 강점 분석</span>
+  <h2>As2 단독 사업의 <em>5가지 강점</em></h2>
+
+  <div class="strength-grid">
+    <div class="strength-item">
+      <div class="strength-num">1</div>
+      <div class="strength-text"><strong>낮은 도입 장벽</strong> — 18kg 경량·IP54 방수로 실내/야외 겸용. 별도 특수 환경 준비 없이 투입 가능</div>
+    </div>
+    <div class="strength-item">
+      <div class="strength-num">2</div>
+      <div class="strength-text"><strong>자동 충전 도크(EDU)</strong> — 무인 24시간 운용의 핵심. "사람 없이 로봇이 알아서 충전하고 다시 일합니다"라는 강력한 셀링 포인트</div>
+    </div>
+    <div class="strength-item">
+      <div class="strength-num">3</div>
+      <div class="strength-text"><strong>ISS 3.0 팔로우</strong> — 작업자 동행, 보안 추적 등 새로운 사업 모델의 기반이 되는 고유 기능</div>
+    </div>
+    <div class="strength-item">
+      <div class="strength-num">4</div>
+      <div class="strength-text"><strong>2차 개발 공식 지원(EDU)</strong> — SDK + Jetson 확장으로 고객 맞춤 솔루션을 자유롭게 개발 가능</div>
+    </div>
+    <div class="strength-item">
+      <div class="strength-num">5</div>
+      <div class="strength-text"><strong>가격 경쟁력</strong> — B2 대비 현저히 낮은 가격대(추정)로, 다수 로봇 배포 Fleet 운용 사업에 적합</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 6: 리스크                                  -->
+<!-- ══════════════════════════════════════════════════ -->
+<section class="section">
+  <span class="section-label">검토 2-3 — 리스크</span>
+  <h2>As2 단독 사업의 <em>리스크</em></h2>
+
+  <table class="risk-table">
+    <thead>
+      <tr><th>리스크</th><th>영향</th><th>대응 방안</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>As2 출시 일정 미확정</td>
+        <td>사업 일정 지연 가능</td>
+        <td>Unitree 측에 출시 일정 확인</td>
+      </tr>
+      <tr>
+        <td>IP54 한계</td>
+        <td>폭우·분진 환경 투입 불가</td>
+        <td>타겟 시장을 실내+일반 옥외로 한정</td>
+      </tr>
+      <tr>
+        <td>적재 능력 제한 (15kg)</td>
+        <td>중량물 운반 불가</td>
+        <td>경량 물품 운반·센서 탑재 용도로 포지셔닝</td>
+      </tr>
+      <tr>
+        <td>As2 EDU 가격 미확정</td>
+        <td>솔루션 가격 산정 어려움</td>
+        <td>Unitree에 견적 요청 필요</td>
+      </tr>
+      <tr>
+        <td>경쟁사 존재</td>
+        <td>Boston Dynamics Spot, 현대로보틱스 등</td>
+        <td>Unitree 가격 경쟁력 + 비앤비 SI 역량으로 차별화</td>
+      </tr>
+      <tr>
+        <td>개발 인력 필요</td>
+        <td>SDK 기반 개발 엔지니어 확보</td>
+        <td>디스펙터 Cerebix와 협업 시 개발 부담 경감 가능</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 7: 검토 2 결론 + 종합                      -->
+<!-- ══════════════════════════════════════════════════ -->
+<section class="section">
+  <span class="section-label">검토 2 — 결론</span>
+  <h2>As2 단독 사업은 <em>가능한가?</em></h2>
+
+  <div class="verdict-inline">
+    <h4>결론: As2(EDU)만으로 단독 사업 구성은 충분히 가능합니다.</h4>
+    <p>As2는 ISS 3.0 팔로우, 스피커/마이크, 전방 조명, 자동 충전 도크 등 <strong>B2에는 없는 스마트 기능을 내장</strong>하고 있어, 이것만으로도 보안/순찰, 산업시설 점검, 작업자 동행 등 독자적인 사업 모델을 구성할 수 있습니다.</p>
+    <p>특히 <em>EDU 모델</em>은 2차 개발 공식 지원 + Jetson 확장 + 자동 충전 도크까지 포함하여, 솔루션 사업의 기반 플랫폼으로서 최적의 선택입니다.</p>
+    <p>다만, As2 출시 일정과 가격이 확정되지 않은 상태이므로, <strong>Unitree에 견적 및 출시 일정 확인이 최우선</strong>입니다.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 8: 종합 요약 + 액션 아이템                  -->
+<!-- ══════════════════════════════════════════════════ -->
+<section class="section">
+  <span class="section-label">종합 요약</span>
+  <h2><em>종합 요약</em> 및 우선 액션</h2>
+
+  <table class="final-table">
+    <thead>
+      <tr><th>검토 항목</th><th>결론</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>검토 1. As2 구매 → B2 기능 확장</td>
+        <td>As2를 구매해도 B2 기능이 자동 확장되지 않음. 핵심 기능 3가지는 이식 불가, 부가 기능 4가지는 As2 없이도 직접 추가 가능</td>
+      </tr>
+      <tr>
+        <td>검토 2. As2 단독 사업 가능성</td>
+        <td>충분히 가능. 보안/순찰, 산업 점검, 작업자 동행 등 독자적 사업 모델 구성 가능. EDU 모델이 최적</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-title">우선 액션 아이템</h3>
+
+  <ol class="action-list">
+    <li><strong>Unitree에 As2 EDU 견적 및 출시 일정 확인</strong> — 사업 계획 수립의 전제 조건</li>
+    <li><strong>디스펙터와 As2 기반 협업 논의</strong> — Cerebix 결합으로 솔루션 완성도 제고</li>
+    <li><strong>1차 타겟 시장 선정</strong> — 보안/순찰 vs 산업 점검 중 초기 타겟 결정</li>
+    <li><strong>As2 EDU 샘플 1대 확보</strong> — PoC 및 솔루션 프로토타입 개발 착수</li>
+  </ol>
+</section>
+
+</div><!-- /container -->
+
+<footer>
+  <span>BnB Robotics &copy; 2025</span>
+  <span>Unitree As2 Purchase Review &middot; Confidential</span>
+</footer>
+
+</body>
+</html>
