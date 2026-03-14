@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B2 개발자 문서 분석 보고서</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@600;700;800;900&family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f4f0;
+      --white: #ffffff;
+      --b2-col: #0f3d5c;
+      --b2-light: #e8f2f9;
+      --b2-mid: #1a6496;
+      --b2-dark: #0a2840;
+      --sdk-col: #2c1a4a;
+      --sdk-light: #f0ebf7;
+      --sdk-mid: #6b4fa0;
+      --ros-col: #1a3a2a;
+      --ros-light: #e8f4ee;
+      --ros-mid: #2d7a4f;
+      --accent: #c8a96e;
+      --accent2: #7eb8a4;
+      --yes: #27734a;
+      --yes-light: #e8f4ee;
+      --partial: #b8860b;
+      --partial-light: #fef9e7;
+      --no: #c0392b;
+      --no-light: #fbeae8;
+      --text: #1a1a1a;
+      --muted: #555555;
+      --border: #e0ddd6;
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.14);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 21px;
+      line-height: 1.9;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, #060e18 0%, #0f3d5c 40%, #1a2a3a 100%);
+      padding: 90px 60px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(26, 100, 150, 0.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: 'SDK';
+      position: absolute;
+      right: 50px;
+      bottom: -50px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 260px;
+      color: rgba(255, 255, 255, 0.03);
+      line-height: 1;
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .hero-badge {
+      background: var(--b2-mid);
+      color: #fff;
+      font-family: 'Nunito', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 7px 20px;
+      border-radius: 20px;
+    }
+
+    .hero-date {
+      color: rgba(255, 255, 255, 0.45);
+      font-size: 18px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 600;
+    }
+
+    .hero h1 {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-weight: 900;
+      font-size: clamp(40px, 5.5vw, 66px);
+      color: #e8e2d9;
+      line-height: 1.3;
+      max-width: 850px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      margin-top: 18px;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 22px;
+      font-weight: 400;
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      line-height: 1.8;
+    }
+
+    /* ── Architecture Strip ── */
+    .arch-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+    }
+
+    .arch-card {
+      padding: 36px 32px;
+      text-align: center;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .arch-card:last-child {
+      border-right: none;
+    }
+
+    .arch-card.layer1 {
+      background: #1a4a6a;
+    }
+
+    .arch-card.layer2 {
+      background: #0f3050;
+    }
+
+    .arch-card.layer3 {
+      background: #0a2040;
+    }
+
+    .arch-label {
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 8px;
+    }
+
+    .arch-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .arch-desc {
+      font-size: 17px;
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.65;
+    }
+
+    /* ── Container & Sections ── */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 60px;
+    }
+
+    .section {
+      margin-top: 52px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 52px 52px 56px;
+      box-shadow: var(--shadow);
+    }
+
+    .section-label {
+      font-family: 'Nunito', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--b2-mid);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--b2-mid);
+    }
+
+    .section h2 {
+      font-weight: 900;
+      font-size: clamp(30px, 4vw, 44px);
+      line-height: 1.35;
+      margin-bottom: 14px;
+    }
+
+    .section h2 em {
+      font-style: normal;
+      color: var(--b2-mid);
+    }
+
+    .section-desc {
+      font-size: 22px;
+      color: var(--muted);
+      margin-bottom: 40px;
+      max-width: 850px;
+      line-height: 1.85;
+    }
+
+    h3.sub-title {
+      font-weight: 700;
+      font-size: clamp(24px, 3vw, 30px);
+      line-height: 1.4;
+      margin-top: 48px;
+      margin-bottom: 22px;
+      padding-left: 18px;
+      border-left: 4px solid var(--b2-mid);
+    }
+
+    /* ── Code Block ── */
+    .code-block {
+      background: #1a1a2e;
+      border-radius: 14px;
+      padding: 32px 36px;
+      margin: 28px 0;
+      overflow-x: auto;
+      box-shadow: var(--shadow);
+    }
+
+    .code-block pre {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      line-height: 1.85;
+      color: #c8d6e5;
+      margin: 0;
+      white-space: pre;
+    }
+
+    .code-block .comment {
+      color: #6b7b8d;
+    }
+
+    .code-block .keyword {
+      color: #c792ea;
+    }
+
+    .code-block .string {
+      color: #c3e88d;
+    }
+
+    .code-block .func {
+      color: #82aaff;
+    }
+
+    .code-block .num {
+      color: #f78c6c;
+    }
+
+    .code-header {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 16px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── API Table ── */
+    .api-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 3px;
+      margin: 28px 0 36px;
+    }
+
+    .api-table thead th {
+      padding: 18px 24px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      text-align: left;
+      color: #fff;
+      background: var(--b2-col);
+    }
+
+    .api-table thead th:first-child {
+      border-radius: 10px 0 0 10px;
+    }
+
+    .api-table thead th:last-child {
+      border-radius: 0 10px 10px 0;
+    }
+
+    .api-table td {
+      padding: 22px 24px;
+      font-size: 20px;
+      background: var(--white);
+      vertical-align: top;
+      line-height: 1.8;
+    }
+
+    .api-table td:first-child {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 17px;
+      font-weight: 700;
+      background: var(--b2-light);
+      border-left: 3px solid var(--b2-mid);
+      white-space: nowrap;
+    }
+
+    .api-table td:nth-child(2) {
+      font-weight: 700;
+      font-size: 20px;
+    }
+
+    .api-table tbody tr {
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .api-table tbody tr:nth-child(1) {
+      animation-delay: 0.03s;
+    }
+
+    .api-table tbody tr:nth-child(2) {
+      animation-delay: 0.06s;
+    }
+
+    .api-table tbody tr:nth-child(3) {
+      animation-delay: 0.09s;
+    }
+
+    .api-table tbody tr:nth-child(4) {
+      animation-delay: 0.12s;
+    }
+
+    .api-table tbody tr:nth-child(5) {
+      animation-delay: 0.15s;
+    }
+
+    .api-table tbody tr:nth-child(6) {
+      animation-delay: 0.18s;
+    }
+
+    .api-table tbody tr:nth-child(7) {
+      animation-delay: 0.21s;
+    }
+
+    .api-table tbody tr:nth-child(8) {
+      animation-delay: 0.24s;
+    }
+
+    .api-table tbody tr:nth-child(9) {
+      animation-delay: 0.27s;
+    }
+
+    .api-table tbody tr:nth-child(10) {
+      animation-delay: 0.30s;
+    }
+
+    .api-table tbody tr:nth-child(11) {
+      animation-delay: 0.33s;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── Standard Table ── */
+    .std-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 3px;
+      margin: 28px 0 36px;
+    }
+
+    .std-table thead th {
+      padding: 18px 24px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      text-align: left;
+      color: #fff;
+      background: var(--text);
+    }
+
+    .std-table thead th:first-child {
+      border-radius: 10px 0 0 10px;
+    }
+
+    .std-table thead th:last-child {
+      border-radius: 0 10px 10px 0;
+    }
+
+    .std-table td {
+      padding: 22px 24px;
+      font-size: 20px;
+      background: var(--white);
+      vertical-align: top;
+      line-height: 1.8;
+    }
+
+    .std-table td:first-child {
+      font-weight: 700;
+      font-size: 20px;
+      background: #fafaf8;
+      border-left: 3px solid var(--border);
+    }
+
+    .std-table tbody tr:hover td {
+      background: #fafaf8;
+    }
+
+    /* ── Mapping Table (Solution Mapping) ── */
+    .map-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 3px;
+      margin: 28px 0 36px;
+    }
+
+    .map-table thead th {
+      padding: 18px 24px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      text-align: left;
+      color: #fff;
+    }
+
+    .map-table thead th:first-child {
+      background: var(--text);
+      border-radius: 10px 0 0 10px;
+      width: 190px;
+    }
+
+    .map-table thead th:nth-child(2) {
+      background: var(--b2-col);
+    }
+
+    .map-table thead th:last-child {
+      background: #4a4a4a;
+      border-radius: 0 10px 10px 0;
+    }
+
+    .map-table td {
+      padding: 22px 24px;
+      font-size: 20px;
+      background: var(--white);
+      vertical-align: top;
+      line-height: 1.8;
+    }
+
+    .map-table td:first-child {
+      font-weight: 700;
+      font-size: 20px;
+      background: #fafaf8;
+      border-left: 3px solid var(--border);
+    }
+
+    .map-table td:nth-child(2) {
+      font-size: 19px;
+    }
+
+    .map-table td:last-child {
+      font-size: 19px;
+      color: var(--muted);
+    }
+
+    .map-table .cat-row td {
+      background: var(--b2-col);
+      color: #fff;
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 14px 24px;
+      border-left: none;
+    }
+
+    .map-table tbody tr {
+      animation: fadeUp 0.4s ease both;
+    }
+
+    /* ── Status Badges ── */
+    .badge {
+      display: inline-block;
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 5px 16px;
+      border-radius: 14px;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-yes {
+      background: var(--yes-light);
+      color: var(--yes);
+    }
+
+    .badge-partial {
+      background: var(--partial-light);
+      color: var(--partial);
+    }
+
+    .badge-no {
+      background: var(--no-light);
+      color: var(--no);
+    }
+
+    /* ── Three-Zone Summary ── */
+    .zone-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      margin: 32px 0;
+    }
+
+    .zone-card {
+      border-radius: 14px;
+      padding: 36px 40px;
+      box-shadow: var(--shadow);
+    }
+
+    .zone-card.sdk-zone {
+      background: linear-gradient(135deg, #e8f2f9 0%, #dde9f0 100%);
+      border: 1px solid rgba(26, 100, 150, 0.2);
+    }
+
+    .zone-card.dev-zone {
+      background: linear-gradient(135deg, #f0ebf7 0%, #e8e0f0 100%);
+      border: 1px solid rgba(107, 79, 160, 0.2);
+    }
+
+    .zone-card.hw-zone {
+      background: linear-gradient(135deg, #fef9e7 0%, #fdf0d0 100%);
+      border: 1px solid rgba(184, 134, 11, 0.2);
+    }
+
+    .zone-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    .zone-title {
+      font-family: 'Nunito', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .sdk-zone .zone-title {
+      color: var(--b2-col);
+    }
+
+    .dev-zone .zone-title {
+      color: var(--sdk-col);
+    }
+
+    .hw-zone .zone-title {
+      color: #8b6914;
+    }
+
+    .zone-desc {
+      font-size: 18px;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .zone-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .zone-list li {
+      font-size: 20px;
+      line-height: 2.0;
+      padding-left: 24px;
+      position: relative;
+    }
+
+    .zone-list li::before {
+      position: absolute;
+      left: 0;
+      font-size: 18px;
+    }
+
+    .sdk-zone .zone-list li::before {
+      content: '\2713';
+      color: var(--yes);
+    }
+
+    .dev-zone .zone-list li::before {
+      content: '\1F528';
+    }
+
+    .hw-zone .zone-list li::before {
+      content: '\1F527';
+    }
+
+    /* ── Roadmap ── */
+    .roadmap {
+      margin: 32px 0;
+      position: relative;
+    }
+
+    .roadmap::before {
+      content: '';
+      position: absolute;
+      left: 32px;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--b2-mid), var(--sdk-mid), var(--accent));
+      border-radius: 2px;
+    }
+
+    .roadmap-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 28px;
+      padding: 22px 0;
+      position: relative;
+    }
+
+    .roadmap-dot {
+      width: 64px;
+      height: 64px;
+      min-width: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Nunito', sans-serif;
+      font-size: 24px;
+      font-weight: 900;
+      color: #fff;
+      z-index: 1;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .roadmap-item:nth-child(-n+2) .roadmap-dot {
+      background: var(--b2-mid);
+    }
+
+    .roadmap-item:nth-child(n+3):nth-child(-n+5) .roadmap-dot {
+      background: var(--sdk-mid);
+    }
+
+    .roadmap-item:nth-child(n+6) .roadmap-dot {
+      background: var(--accent);
+    }
+
+    .roadmap-content {
+      flex: 1;
+      background: var(--white);
+      border-radius: 14px;
+      padding: 28px 32px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .roadmap-stage {
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .roadmap-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .roadmap-meta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .roadmap-tag {
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 14px;
+      letter-spacing: 0.04em;
+    }
+
+    .tag-easy {
+      background: var(--yes-light);
+      color: var(--yes);
+    }
+
+    .tag-medium {
+      background: var(--partial-light);
+      color: var(--partial);
+    }
+
+    .tag-hard {
+      background: var(--no-light);
+      color: var(--no);
+    }
+
+    .tag-time {
+      background: #f0ede6;
+      color: var(--muted);
+    }
+
+    .roadmap-desc {
+      font-size: 20px;
+      color: var(--muted);
+      line-height: 1.85;
+    }
+
+    /* ── Verdict Box ── */
+    .verdict-box {
+      background: linear-gradient(135deg, #0a1a2e 0%, #0f3050 50%, #1a2a3a 100%);
+      border-radius: 16px;
+      padding: 48px 52px;
+      margin: 40px 0;
+      color: #fff;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .verdict-box h3 {
+      font-family: 'Nunito', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+
+    .verdict-box .verdict-subtitle {
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.55);
+      margin-bottom: 32px;
+    }
+
+    .verdict-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .verdict-col {
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 30px 30px 26px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .verdict-col h4 {
+      font-family: 'Nunito', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+    }
+
+    .verdict-col h4 .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .verdict-col ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .verdict-col ul li {
+      font-size: 20px;
+      line-height: 2.0;
+      color: rgba(255, 255, 255, 0.82);
+      padding-left: 22px;
+      position: relative;
+      margin-bottom: 6px;
+    }
+
+    .verdict-col ul li::before {
+      content: '\2014';
+      position: absolute;
+      left: 0;
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    .verdict-summary {
+      margin-top: 28px;
+      padding: 24px 30px;
+      background: rgba(200, 169, 110, 0.1);
+      border: 1px solid rgba(200, 169, 110, 0.2);
+      border-radius: 10px;
+      font-size: 21px;
+      line-height: 1.9;
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .verdict-summary strong {
+      color: var(--accent);
+    }
+
+    /* ── Verdict Inline ── */
+    .verdict-inline {
+      background: linear-gradient(135deg, #0a1a2e 0%, #0f3050 100%);
+      border-radius: 14px;
+      padding: 36px 40px;
+      margin: 36px 0;
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .verdict-inline h4 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 18px;
+    }
+
+    .verdict-inline p {
+      font-size: 21px;
+      line-height: 1.9;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 12px;
+    }
+
+    .verdict-inline p:last-child {
+      margin-bottom: 0;
+    }
+
+    .verdict-inline strong {
+      color: #fff;
+    }
+
+    .verdict-inline em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    /* ── Note Box ── */
+    .note-box {
+      background: var(--white);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      padding: 26px 34px;
+      margin: 28px 0;
+      font-size: 20px;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+
+    .note-box strong {
+      color: var(--text);
+    }
+
+    .note-box.blue {
+      border-left-color: var(--b2-mid);
+    }
+
+    .note-box.green {
+      border-left-color: var(--ros-mid);
+    }
+
+    /* ── Action List ── */
+    .action-list {
+      list-style: none;
+      margin: 28px 0;
+      padding: 0;
+      counter-reset: action;
+    }
+
+    .action-list li {
+      counter-increment: action;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 22px;
+      line-height: 1.85;
+    }
+
+    .action-list li:last-child {
+      border-bottom: none;
+    }
+
+    .action-list li::before {
+      content: counter(action);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      color: #fff;
+      background: var(--b2-mid);
+      min-width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* ── Personnel Grid ── */
+    .personnel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin: 28px 0;
+    }
+
+    .personnel-card {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 30px 32px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s;
+    }
+
+    .personnel-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .personnel-role {
+      font-family: 'Nunito', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--b2-col);
+      margin-bottom: 10px;
+    }
+
+    .personnel-skills {
+      font-size: 20px;
+      color: var(--muted);
+      line-height: 1.85;
+    }
+
+    .personnel-note {
+      margin-top: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--b2-mid);
+    }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 80px;
+      padding: 40px 60px;
+      border-top: 1px solid var(--border);
+      font-family: 'Nunito', sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+
+      .hero,
+      footer {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      .container {
+        padding: 0 20px;
+      }
+
+      .section {
+        padding: 32px 24px 36px;
+      }
+
+      .arch-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .verdict-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .personnel-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .api-table,
+      .std-table,
+      .map-table {
+        font-size: 16px;
+      }
+
+      .api-table td,
+      .std-table td,
+      .map-table td {
+        padding: 14px 16px;
+      }
+
+      .roadmap::before {
+        left: 22px;
+      }
+
+      .roadmap-dot {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════ Hero ══════ -->
+  <div class="hero">
+    <div class="hero-meta">
+      <span class="hero-badge">B2 Developer</span>
+      <span class="hero-date">2026.03.13</span>
+    </div>
+    <h1>B2 <em>개발자 문서</em> 분석 보고서</h1>
+    <p class="hero-sub">SDK로 무엇을 만들 수 있는지 파악하고,<br>순찰·점검 솔루션 개발에 필요한 로드맵을 제시한다.</p>
+  </div>
+
+  <!-- ══════ Architecture Strip ══════ -->
+  <div class="arch-strip">
+    <div class="arch-card layer1">
+      <div class="arch-label">Layer 3 — Application</div>
+      <div class="arch-title">우리가 만드는 솔루션</div>
+      <div class="arch-desc">순찰, 점검, 관제 시스템 등<br>SDK 위에 구축하는 영역</div>
+    </div>
+    <div class="arch-card layer2">
+      <div class="arch-label">Layer 2 — SDK</div>
+      <div class="arch-title">unitree_sdk2</div>
+      <div class="arch-desc">CycloneDDS 기반 통신<br>Sport API 21개 명령 + Low-Level 제어</div>
+    </div>
+    <div class="arch-card layer3">
+      <div class="arch-label">Layer 1 — Hardware</div>
+      <div class="arch-title">B2 내장 컴퓨터</div>
+      <div class="arch-desc">로봇 192.168.123.18<br>LiDAR 192.168.123.20 · PC 192.168.123.99</div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- ══════ Section 1: SDK 구조 ══════ -->
+    <div class="section">
+      <div class="section-label">Section 01</div>
+      <h2>B2 SDK <em>전체 구조</em></h2>
+      <p class="section-desc">B2의 개발 환경은 3개의 SDK 패키지로 구성되며, 모두 유니트리 전 로봇에서 공유된다.</p>
+
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th>SDK 패키지</th>
+            <th>설명</th>
+            <th>언어</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>unitree_sdk2</td>
+            <td>CycloneDDS 기반 핵심 통신 SDK. Go2, B2, H1 등 전 로봇 공용</td>
+            <td>C++, Python</td>
+          </tr>
+          <tr>
+            <td>unitree_sdk2_python</td>
+            <td>Python 전용 래퍼. <strong>pip install</strong>로 간편 설치</td>
+            <td>Python</td>
+          </tr>
+          <tr>
+            <td>unitree_ros2</td>
+            <td>ROS2 래퍼 패키지. Humble 공식 지원</td>
+            <td>C++/Python (ROS2)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="note-box blue">
+        <strong>핵심 포인트:</strong> SDK는 유니트리 전 로봇에서 공유된다. B2 전용 기능은 Sport API의 명령 ID와 파라미터 범위에서 차이가 난다. 즉, SDK 학습은 한 번이면
+        다른 로봇에도 적용 가능하다.
+      </div>
+    </div>
+
+    <!-- ══════ Section 2: High-Level Sport API ══════ -->
+    <div class="section">
+      <div class="section-label">Section 02</div>
+      <h2>High-Level <em>Sport API</em> — 21개 명령</h2>
+      <p class="section-desc">별도의 보행 알고리즘 개발 없이 즉시 사용 가능한 고수준 명령. 순찰·점검의 핵심 기반이다.</p>
+
+      <h3 class="sub-title">이동 · 기본 제어</h3>
+
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>API ID</th>
+            <th>명령</th>
+            <th>설명</th>
+            <th>활용 시나리오</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1001</td>
+            <td>Damp</td>
+            <td>전 관절 감쇠 (비상 정지)</td>
+            <td>비상 상황 즉시 정지</td>
+          </tr>
+          <tr>
+            <td>1002</td>
+            <td>BalanceStand</td>
+            <td>균형 잡힌 기립 자세</td>
+            <td>정지 상태에서 센서 수집</td>
+          </tr>
+          <tr>
+            <td>1003</td>
+            <td>StopMove</td>
+            <td>이동 즉시 정지</td>
+            <td>장애물 감지 시 긴급 정지</td>
+          </tr>
+          <tr>
+            <td>1004</td>
+            <td>StandUp</td>
+            <td>엎드린 상태 → 기립</td>
+            <td>전원 ON 후 초기 자세</td>
+          </tr>
+          <tr>
+            <td>1005</td>
+            <td>StandDown</td>
+            <td>기립 → 엎드림</td>
+            <td>충전 또는 대기 모드</td>
+          </tr>
+          <tr>
+            <td>1008</td>
+            <td>Move</td>
+            <td>vx, vy, vyaw 속도 제어</td>
+            <td><strong>자율주행 이동의 기본</strong></td>
+          </tr>
+          <tr>
+            <td>1010</td>
+            <td>Sit</td>
+            <td>앉기 자세</td>
+            <td>대기 자세</td>
+          </tr>
+          <tr>
+            <td>1020</td>
+            <td>SwitchGait</td>
+            <td>보행 패턴 전환 (trot 등)</td>
+            <td>지형별 보행 모드 변경</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-title">경로 · 자율주행 (핵심)</h3>
+
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>API ID</th>
+            <th>명령</th>
+            <th>설명</th>
+            <th>활용 시나리오</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1028</td>
+            <td>Euler</td>
+            <td>Roll/Pitch/Yaw 자세 제어</td>
+            <td>경사면 보정, 카메라 각도</td>
+          </tr>
+          <tr>
+            <td>1035</td>
+            <td>BodyHeight</td>
+            <td>몸체 높이 조정</td>
+            <td>점검 높이 최적화</td>
+          </tr>
+          <tr>
+            <td>1037</td>
+            <td>TrajectoryFollow</td>
+            <td><strong>경로점(waypoint) 순차 이동</strong></td>
+            <td><strong>순찰 경로 자동 실행</strong></td>
+          </tr>
+          <tr>
+            <td>1038</td>
+            <td>ContinuousGait</td>
+            <td>연속 보행 유지</td>
+            <td>장거리 순찰</td>
+          </tr>
+          <tr>
+            <td>1045</td>
+            <td>SpeedLevel</td>
+            <td>이동 속도 단계 설정</td>
+            <td>순찰 속도 vs 이동 속도</td>
+          </tr>
+          <tr>
+            <td>1101</td>
+            <td>FrontJump</td>
+            <td>전방 점프</td>
+            <td>장애물 넘기</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-title">코드 예시 — Python 이동 제어</h3>
+
+      <div class="code-block">
+        <div class="code-header">b2_move_example.py</div>
+        <pre><span class="keyword">import</span> unitree_sdk2py <span class="keyword">as</span> sdk
+
+<span class="comment"># 1. DDS 통신 채널 초기화</span>
+channel = sdk.ChannelFactory.Instance()
+channel.<span class="func">Init</span>(<span class="num">0</span>, <span class="string">"eth0"</span>)
+
+<span class="comment"># 2. Sport Client 생성</span>
+sport_client = sdk.<span class="func">SportClient</span>()
+sport_client.<span class="func">SetTimeout</span>(<span class="num">10.0</span>)
+sport_client.<span class="func">Init</span>()
+
+<span class="comment"># 3. 이동 명령 (전진 0.3m/s)</span>
+sport_client.<span class="func">Move</span>(<span class="num">0.3</span>, <span class="num">0.0</span>, <span class="num">0.0</span>)
+
+<span class="comment"># 4. 경로점 이동 (TrajectoryFollow)</span>
+path_points = [...]  <span class="comment"># x, y, yaw, vx, vy, vyaw 배열</span>
+sport_client.<span class="func">TrajectoryFollow</span>(path_points)</pre>
+      </div>
+    </div>
+
+    <!-- ══════ Section 3: Low-Level ══════ -->
+    <div class="section">
+      <div class="section-label">Section 03</div>
+      <h2>Low-Level <em>관절 제어</em></h2>
+      <p class="section-desc">12개 관절을 500Hz로 직접 제어하는 고급 기능. 커스텀 보행 알고리즘 연구용.</p>
+
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th>관절 ID</th>
+            <th>위치</th>
+            <th>구성</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0 — 2</td>
+            <td>전방 우측 다리 (FR)</td>
+            <td>Hip, Thigh, Calf</td>
+          </tr>
+          <tr>
+            <td>3 — 5</td>
+            <td>전방 좌측 다리 (FL)</td>
+            <td>Hip, Thigh, Calf</td>
+          </tr>
+          <tr>
+            <td>6 — 8</td>
+            <td>후방 우측 다리 (RR)</td>
+            <td>Hip, Thigh, Calf</td>
+          </tr>
+          <tr>
+            <td>9 — 11</td>
+            <td>후방 좌측 다리 (RL)</td>
+            <td>Hip, Thigh, Calf</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="note-box">
+        <strong>사용 조건:</strong> MotionSwitcherClient.ReleaseMode() 호출 필수 (기본 Sport Mode 해제). PD 제어 게인(Kp, Kd) 설정 필요.
+        부적절한 제어값은 로봇 파손을 유발할 수 있다.
+      </div>
+
+      <div class="verdict-inline">
+        <h4>현 단계에서는 불필요</h4>
+        <p>순찰·점검 솔루션은 <em>High-Level Sport API만으로 충분</em>하다. Low-Level 제어는 커스텀 보행 알고리즘(연구용) 또는 특수 동작 개발 시에만 필요하며, 현재 우리의
+          사업 목표와는 관계없다.</p>
+      </div>
+    </div>
+
+    <!-- ══════ Section 4: 센서 + ROS2 ══════ -->
+    <div class="section">
+      <div class="section-label">Section 04</div>
+      <h2>센서 접근 및 <em>ROS2</em> 연동</h2>
+      <p class="section-desc">B2에 탑재된 센서와 ROS2 생태계를 통한 확장 가능성.</p>
+
+      <h3 class="sub-title">탑재 센서 접근 방법</h3>
+
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th>센서</th>
+            <th>접근 방법</th>
+            <th>데이터</th>
+            <th>활용</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>3D LiDAR</td>
+            <td>IP 192.168.123.20<br>ROS2 /utlidar/cloud</td>
+            <td>PointCloud2</td>
+            <td>SLAM, 장애물 감지, 3D 맵핑</td>
+          </tr>
+          <tr>
+            <td>IMU</td>
+            <td>/lowstate 토픽</td>
+            <td>가속도, 자이로, 쿼터니언</td>
+            <td>자세 추정, 경사 감지</td>
+          </tr>
+          <tr>
+            <td>관절 인코더</td>
+            <td>/lowstate 토픽</td>
+            <td>각도, 속도, 토크</td>
+            <td>상태 모니터링</td>
+          </tr>
+          <tr>
+            <td>전방 카메라</td>
+            <td>별도 드라이버/IP</td>
+            <td>RGB 영상</td>
+            <td>물체 인식, 이상 감지</td>
+          </tr>
+          <tr>
+            <td>풋 포스</td>
+            <td>/lowstate 토픽</td>
+            <td>발바닥 압력</td>
+            <td>지형 판단</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-title">ROS2 주요 토픽</h3>
+
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>토픽</th>
+            <th>타입</th>
+            <th>설명</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>/sportmodestate</td>
+            <td>SportModeState</td>
+            <td>위치, 속도, 보행 상태 실시간 조회</td>
+          </tr>
+          <tr>
+            <td>/lowstate</td>
+            <td>LowState</td>
+            <td>관절 상태, IMU, 배터리 정보</td>
+          </tr>
+          <tr>
+            <td>/utlidar/cloud</td>
+            <td>PointCloud2</td>
+            <td>3D 포인트클라우드 (LiDAR)</td>
+          </tr>
+          <tr>
+            <td>/api/sport/request</td>
+            <td>Request</td>
+            <td>Sport API 명령 전송</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="note-box green">
+        <strong>ROS2 활용의 핵심 이점:</strong> Nav2(자율 주행), SLAM Toolbox(맵 생성), RViz2(시각화) 등 성숙한 오픈소스 패키지를 즉시 활용할 수 있다. 처음부터
+        만들 필요가 없다.
+      </div>
+    </div>
+
+    <!-- ══════ Section 5: 솔루션 매핑 ══════ -->
+    <div class="section">
+      <div class="section-label">Section 05</div>
+      <h2>솔루션별 <em>SDK 매핑</em></h2>
+      <p class="section-desc">순찰·점검 솔루션에 필요한 기능별로 SDK 지원 여부를 매핑한다.</p>
+
+      <h3 class="sub-title">순찰 솔루션 (Patrol)</h3>
+
+      <table class="map-table">
+        <thead>
+          <tr>
+            <th>필요 기능</th>
+            <th>SDK 지원</th>
+            <th>구현 방법</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>지정 경로 순찰</td>
+            <td><span class="badge badge-yes">SDK 지원</span></td>
+            <td>TrajectoryFollow (API 1037) + 웨이포인트 사전 설정</td>
+          </tr>
+          <tr>
+            <td>자율 이동</td>
+            <td><span class="badge badge-yes">SDK 지원</span></td>
+            <td>Move (API 1008) + ROS2 Nav2 연동</td>
+          </tr>
+          <tr>
+            <td>장애물 회피</td>
+            <td><span class="badge badge-yes">HW 탑재</span></td>
+            <td>LiDAR + ROS2 Nav2 Costmap → 통합 개발 필요</td>
+          </tr>
+          <tr>
+            <td>맵 생성</td>
+            <td><span class="badge badge-yes">HW 탑재</span></td>
+            <td>LiDAR + ROS2 SLAM Toolbox → 통합 개발 필요</td>
+          </tr>
+          <tr>
+            <td>이상 감지</td>
+            <td><span class="badge badge-partial">HW만</span></td>
+            <td>카메라 영상 → AI 모델 자체 개발 필요</td>
+          </tr>
+          <tr>
+            <td>음성 경고</td>
+            <td><span class="badge badge-no">미지원</span></td>
+            <td>외장 스피커 추가 + 소프트웨어 개발</td>
+          </tr>
+          <tr>
+            <td>야간 조명</td>
+            <td><span class="badge badge-no">미지원</span></td>
+            <td>외장 LED 추가 + GPIO 제어</td>
+          </tr>
+          <tr>
+            <td>자동 충전 복귀</td>
+            <td><span class="badge badge-no">미지원</span></td>
+            <td>충전 도크 + 도킹 알고리즘 자체 개발</td>
+          </tr>
+          <tr>
+            <td>원격 관제</td>
+            <td><span class="badge badge-partial">부분</span></td>
+            <td>SDK 상태 조회 가능, 관제 UI/통신은 자체 개발</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-title">시설 점검 솔루션 (Inspection)</h3>
+
+      <table class="map-table">
+        <thead>
+          <tr>
+            <th>필요 기능</th>
+            <th>SDK 지원</th>
+            <th>구현 방법</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>정해진 경로 점검</td>
+            <td><span class="badge badge-yes">SDK 지원</span></td>
+            <td>TrajectoryFollow + 웨이포인트</td>
+          </tr>
+          <tr>
+            <td>카메라 높이 조절</td>
+            <td><span class="badge badge-yes">SDK 지원</span></td>
+            <td>BodyHeight (API 1035)</td>
+          </tr>
+          <tr>
+            <td>자세 제어</td>
+            <td><span class="badge badge-yes">SDK 지원</span></td>
+            <td>Euler (API 1028) — 촬영 각도 조절</td>
+          </tr>
+          <tr>
+            <td>3D 환경 스캔</td>
+            <td><span class="badge badge-yes">HW 탑재</span></td>
+            <td>LiDAR PointCloud → 후처리 개발</td>
+          </tr>
+          <tr>
+            <td>열화상 촬영</td>
+            <td><span class="badge badge-no">미지원</span></td>
+            <td>외장 열화상 카메라 추가 필요</td>
+          </tr>
+          <tr>
+            <td>가스 감지</td>
+            <td><span class="badge badge-no">미지원</span></td>
+            <td>외장 가스 센서 추가 필요</td>
+          </tr>
+          <tr>
+            <td>점검 리포트</td>
+            <td><span class="badge badge-no">미지원</span></td>
+            <td>서버측 소프트웨어 자체 개발</td>
+          </tr>
+          <tr>
+            <td>이전 데이터 비교</td>
+            <td><span class="badge badge-no">미지원</span></td>
+            <td>DB + 비교 알고리즘 자체 개발</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-title">요약 — 3개 영역 구분</h3>
+
+      <div class="zone-grid">
+        <div class="zone-card sdk-zone">
+          <div class="zone-title">SDK가 해결해주는 영역 (개발 불필요)</div>
+          <div class="zone-desc">보행 알고리즘 없이 즉시 사용 가능한 기능들</div>
+          <ul class="zone-list">
+            <li>로봇 이동 (전진, 회전, 속도 제어)</li>
+            <li>경로점 기반 이동 (TrajectoryFollow)</li>
+            <li>자세 제어 (높이, 기울기)</li>
+            <li>상태 모니터링 (배터리, 관절, IMU)</li>
+            <li>LiDAR 데이터 접근</li>
+            <li>비상 정지 / 안전 제어</li>
+          </ul>
+        </div>
+        <div class="zone-card dev-zone">
+          <div class="zone-title">우리가 개발해야 하는 영역</div>
+          <div class="zone-desc">솔루션의 핵심 부가가치이자 우리의 개발 영역</div>
+          <ul class="zone-list">
+            <li>SLAM 맵 생성 (ROS2 패키지 활용 가능, 통합 필요)</li>
+            <li>자율 주행 경로 계획 (Nav2 활용 가능, 커스터마이징 필요)</li>
+            <li>장애물 감지·회피 로직</li>
+            <li>AI 기반 이상 감지 (카메라 영상 분석)</li>
+            <li>원격 관제 시스템 (UI + 통신)</li>
+            <li>점검 데이터 관리 (DB + 리포트)</li>
+          </ul>
+        </div>
+        <div class="zone-card hw-zone">
+          <div class="zone-title">외장 하드웨어 추가 필요</div>
+          <div class="zone-desc">B2에 탑재되지 않아 별도 구매·장착이 필요한 장비</div>
+          <ul class="zone-list">
+            <li>스피커/마이크 (음성 경고·양방향 통신)</li>
+            <li>전방 LED 조명 (야간 운용)</li>
+            <li>Wi-Fi/4G 모듈 (원격 통신)</li>
+            <li>GPS 모듈 (야외 측위)</li>
+            <li>열화상 카메라 (점검용, 선택)</li>
+            <li>자동 충전 도크 (24시간 운용, 선택)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════ Section 6: 개발 로드맵 ══════ -->
+    <div class="section">
+      <div class="section-label">Section 06</div>
+      <h2>개발 <em>로드맵</em> 및 난이도</h2>
+      <p class="section-desc">SDK 환경 구축부터 24시간 무인 운용까지, 8단계 개발 로드맵.</p>
+
+      <div class="roadmap">
+        <div class="roadmap-item">
+          <div class="roadmap-dot">1</div>
+          <div class="roadmap-content">
+            <div class="roadmap-stage">Phase 1 — 즉시 시작</div>
+            <div class="roadmap-title">SDK 환경 구축 + 기본 이동 제어</div>
+            <div class="roadmap-meta">
+              <span class="roadmap-tag tag-easy">난이도 낮음</span>
+              <span class="roadmap-tag tag-time">1~2주</span>
+            </div>
+            <div class="roadmap-desc">Python, Linux, 네트워크 기초 지식만으로 시작 가능. SDK 설치 후 Move, StandUp 등 기본 명령 테스트.</div>
+          </div>
+        </div>
+
+        <div class="roadmap-item">
+          <div class="roadmap-dot">2</div>
+          <div class="roadmap-content">
+            <div class="roadmap-stage">Phase 2</div>
+            <div class="roadmap-title">LiDAR 데이터 수집 + ROS2 연동</div>
+            <div class="roadmap-meta">
+              <span class="roadmap-tag tag-easy">난이도 낮음</span>
+              <span class="roadmap-tag tag-time">2~3주</span>
+            </div>
+            <div class="roadmap-desc">ROS2 Humble 환경 구축, /utlidar/cloud 토픽 수신, RViz2로 포인트클라우드 시각화.</div>
+          </div>
+        </div>
+
+        <div class="roadmap-item">
+          <div class="roadmap-dot">3</div>
+          <div class="roadmap-content">
+            <div class="roadmap-stage">Phase 3</div>
+            <div class="roadmap-title">SLAM 맵 생성 (실내 환경)</div>
+            <div class="roadmap-meta">
+              <span class="roadmap-tag tag-medium">난이도 중간</span>
+              <span class="roadmap-tag tag-time">3~4주</span>
+            </div>
+            <div class="roadmap-desc">SLAM Toolbox + LiDAR로 실내 환경 2D/3D 맵 생성. SLAM 이론 및 ROS2 Nav Stack 이해 필요.</div>
+          </div>
+        </div>
+
+        <div class="roadmap-item">
+          <div class="roadmap-dot">4</div>
+          <div class="roadmap-content">
+            <div class="roadmap-stage">Phase 4</div>
+            <div class="roadmap-title">자율 주행 (경로 계획 + 장애물 회피)</div>
+            <div class="roadmap-meta">
+              <span class="roadmap-tag tag-medium">난이도 중간</span>
+              <span class="roadmap-tag tag-time">4~6주</span>
+            </div>
+            <div class="roadmap-desc">Nav2 Costmap + 경로 알고리즘 통합. 맵 기반 자율 이동 구현.</div>
+          </div>
+        </div>
+
+        <div class="roadmap-item">
+          <div class="roadmap-dot">5</div>
+          <div class="roadmap-content">
+            <div class="roadmap-stage">Phase 5</div>
+            <div class="roadmap-title">순찰 시나리오 통합 (웨이포인트 순찰)</div>
+            <div class="roadmap-meta">
+              <span class="roadmap-tag tag-medium">난이도 중간</span>
+              <span class="roadmap-tag tag-time">3~4주</span>
+            </div>
+            <div class="roadmap-desc">웨이포인트 설정, 순찰 스케줄링, 상태 머신 설계. 시스템 통합 + 프로토타입 완성.</div>
+          </div>
+        </div>
+
+        <div class="roadmap-item">
+          <div class="roadmap-dot">6</div>
+          <div class="roadmap-content">
+            <div class="roadmap-stage">Phase 6</div>
+            <div class="roadmap-title">AI 이상 감지 (카메라 영상 분석)</div>
+            <div class="roadmap-meta">
+              <span class="roadmap-tag tag-hard">난이도 높음</span>
+              <span class="roadmap-tag tag-time">6~8주</span>
+            </div>
+            <div class="roadmap-desc">컴퓨터 비전 + 딥러닝 모델 개발. YOLO 등 비전 모델로 이상 상황 실시간 감지.</div>
+          </div>
+        </div>
+
+        <div class="roadmap-item">
+          <div class="roadmap-dot">7</div>
+          <div class="roadmap-content">
+            <div class="roadmap-stage">Phase 7</div>
+            <div class="roadmap-title">원격 관제 시스템</div>
+            <div class="roadmap-meta">
+              <span class="roadmap-tag tag-medium">난이도 중간</span>
+              <span class="roadmap-tag tag-time">4~6주</span>
+            </div>
+            <div class="roadmap-desc">웹/앱 대시보드, 실시간 통신 (WebSocket), 다중 로봇 모니터링 UI 개발.</div>
+          </div>
+        </div>
+
+        <div class="roadmap-item">
+          <div class="roadmap-dot">8</div>
+          <div class="roadmap-content">
+            <div class="roadmap-stage">Phase 8 — 최종</div>
+            <div class="roadmap-title">24시간 무인 운용 (자동 충전)</div>
+            <div class="roadmap-meta">
+              <span class="roadmap-tag tag-hard">난이도 높음</span>
+              <span class="roadmap-tag tag-time">8~12주</span>
+            </div>
+            <div class="roadmap-desc">충전 도크 하드웨어 설계 + 도킹 알고리즘 개발. 완전 무인 자율 운용 체계 구축.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="verdict-inline">
+        <h4>현실적 평가</h4>
+        <p><strong>1~5단계 (SDK 활용 + 자율 순찰):</strong> ROS2 경험이 있는 로봇 SW 엔지니어 <em>1~2명</em>이면 <em>3~4개월</em> 내 프로토타입 가능.
+          ROS2 오픈소스 패키지를 적극 활용하면 개발 기간을 단축할 수 있다.</p>
+        <p><strong>6~8단계 (AI + 관제 + 무인화):</strong> 추가 전문 인력 필요 (AI, 웹 개발). <em>디스펙터 Cerebix 연동 시 AI/관제 부분의 개발 부담을
+            경감</em>할 수 있다.</p>
+      </div>
+    </div>
+
+    <!-- ══════ Section 7: 필요 인력 ══════ -->
+    <div class="section">
+      <div class="section-label">Section 07</div>
+      <h2>필요 <em>인력</em> 프로필</h2>
+      <p class="section-desc">솔루션 개발에 필요한 역할과 핵심 스킬.</p>
+
+      <div class="personnel-grid">
+        <div class="personnel-card">
+          <div class="personnel-role">로봇 SW 엔지니어</div>
+          <div class="personnel-skills">Python/C++, ROS2, Linux, SLAM</div>
+          <div class="personnel-note">1~2명 필수 — 개발 속도의 핵심 변수</div>
+        </div>
+        <div class="personnel-card">
+          <div class="personnel-role">AI/비전 엔지니어</div>
+          <div class="personnel-skills">PyTorch, 컴퓨터 비전, 엣지 AI</div>
+          <div class="personnel-note">이상 감지 개발 시 1명</div>
+        </div>
+        <div class="personnel-card">
+          <div class="personnel-role">백엔드 개발자</div>
+          <div class="personnel-skills">서버, DB, API, 실시간 통신</div>
+          <div class="personnel-note">관제 시스템 개발 시 1명</div>
+        </div>
+        <div class="personnel-card">
+          <div class="personnel-role">프론트엔드 개발자</div>
+          <div class="personnel-skills">웹 UI, 대시보드, WebSocket</div>
+          <div class="personnel-note">관제 UI 개발 시 1명</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════ Section 8: 핵심 결론 ══════ -->
+    <div class="section">
+      <div class="section-label">Conclusion</div>
+      <h2>핵심 <em>결론</em></h2>
+      <p class="section-desc">B2 SDK 분석을 통해 도출한 4가지 핵심 결론.</p>
+
+      <div class="verdict-box">
+        <h3>B2 SDK 분석 결론</h3>
+        <div class="verdict-subtitle">SDK는 "이동 플랫폼"으로서 충분하다. 그 위에 얹는 것이 우리의 부가가치다.</div>
+
+        <div class="verdict-grid">
+          <div class="verdict-col">
+            <h4><span class="dot" style="background:var(--yes)"></span> SDK가 제공하는 것</h4>
+            <ul>
+              <li>21개 고수준 API로 즉시 이동 제어</li>
+              <li>보행 알고리즘 자체 개발 불필요</li>
+              <li>LiDAR, IMU 등 센서 데이터 접근</li>
+              <li>ROS2 공식 지원 (Nav2, SLAM 활용)</li>
+              <li>C++/Python 모두 지원</li>
+            </ul>
+          </div>
+          <div class="verdict-col">
+            <h4><span class="dot" style="background:var(--no)"></span> 우리가 만들어야 하는 것</h4>
+            <ul>
+              <li>SLAM 통합 + 자율 주행 로직</li>
+              <li>AI 기반 이상 감지</li>
+              <li>원격 관제 시스템</li>
+              <li>외장 센서 연동 (스피커, 조명, 4G 등)</li>
+              <li>자동 충전 도크 (24시간 운용)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="verdict-summary">
+          <strong>ROS2 생태계가 개발 부담을 줄여준다.</strong> Nav2, SLAM Toolbox 등 성숙한 패키지를 활용하면 처음부터 만들 필요가 없다. <strong>디스펙터
+            Cerebix 협업이 의미 있는 이유:</strong> SDK가 제공하지 않는 AI 분석, 관제 시스템, 엣지 컴퓨팅 영역이 정확히 디스펙터의 역량과 겹친다.
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════ Section 9: Action Items ══════ -->
+    <div class="section">
+      <div class="section-label">Action Items</div>
+      <h2>첫 번째 <em>액션</em></h2>
+      <p class="section-desc">즉시 실행 가능한 3가지 우선 액션.</p>
+
+      <ol class="action-list">
+        <li><strong>SDK 환경 구축 + 기본 이동 테스트</strong> — B2로 즉시 시작 가능. Python SDK 설치 후 Move, StandUp 등 기본 명령 검증. <strong>예상
+            1~2주.</strong></li>
+        <li><strong>ROS2 연동 + LiDAR 데이터 수집</strong> — ROS2 Humble 환경에서 /utlidar/cloud 토픽 수신 확인. SLAM 준비 단계. <strong>예상
+            2~3주.</strong></li>
+        <li><strong>ROS2 경험 있는 로봇 SW 엔지니어 확보</strong> — 개발 속도의 핵심 변수. 1~2명 확보가 프로토타입 일정을 결정한다.</li>
+      </ol>
+    </div>
+
+  </div><!-- /.container -->
+
+  <footer>
+    <span>&copy; BnB Robotics &middot; B2 개발자 문서 분석</span>
+    <span>Sources: support.unitree.com/B2_developer &middot; github.com/unitreerobotics</span>
+  </footer>
+
+</body>
+
+</html>
