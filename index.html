@@ -92,26 +92,28 @@
 
   main {
     padding: 60px;
-    max-width: 1100px;
+    max-width: 1600px;
+    margin: 0 auto;
   }
 
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(460px, 1fr));
-    gap: 2px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
   }
 
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
-    padding: 40px 44px;
+    padding: 28px 28px;
     position: relative;
     transition: background 0.25s, border-color 0.25s;
     cursor: pointer;
     text-decoration: none;
-    display: block;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
-    border-radius: 6px;
+    border-radius: 10px;
     animation: fadeUp 0.5s ease both;
   }
 
@@ -124,6 +126,8 @@
   .card:nth-child(7) { animation-delay: 0.35s; }
   .card:nth-child(8) { animation-delay: 0.40s; }
   .card:nth-child(9) { animation-delay: 0.45s; }
+  .card:nth-child(10) { animation-delay: 0.50s; }
+  .card:nth-child(11) { animation-delay: 0.55s; }
 
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(20px); }
@@ -169,22 +173,24 @@
   .card h2 {
     font-family: 'Noto Sans KR', sans-serif;
     font-weight: 700;
-    font-size: 22px;
+    font-size: 18px;
     line-height: 1.55;
     color: var(--text);
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     transition: color 0.2s;
   }
   .card:hover h2 { color: var(--accent); }
 
   .card p {
-    font-size: 15px;
+    font-size: 13px;
     color: var(--muted);
-    line-height: 1.8;
+    line-height: 1.75;
+    flex: 1;
   }
 
   .card-footer {
-    margin-top: 30px;
+    margin-top: auto;
+    padding-top: 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -230,6 +236,12 @@
     align-items: center;
   }
 
+  @media (max-width: 1400px) {
+    .grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 1000px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
   @media (max-width: 640px) {
     header, main, footer { padding: 40px 24px; }
     .grid { grid-template-columns: 1fr; }
@@ -241,15 +253,15 @@
 <header>
   <div class="label">Reports Archive</div>
   <h1>보고서 <span>모음집</span></h1>
-  <p class="subtitle">Compiled by 윤범 · 10 reports</p>
-  <!-- card count: 10 -->
+  <p class="subtitle">Compiled by 윤범 · 11 reports</p>
+  <!-- card count: 11 -->
 </header>
 
 <main>
   <div class="grid">
 
     <a class="card" href="https://robotcomp-act247kd.manus.space/" target="_blank">
-      <div class="card-number">01 / 10</div>
+      <div class="card-number">01 / 11</div>
       <div class="card-tag">로봇·하드웨어</div>
       <h2>유니트리 B2 vs 현대차 Spot 비교 보고서</h2>
       <p>산업용 4족 보행 로봇 핵심 스펙 및 성능 비교 분석</p>
@@ -260,7 +272,7 @@
     </a>
 
     <a class="card" href="https://dspecterrep-xpabwysu.manus.space/" target="_blank">
-      <div class="card-number">02 / 10</div>
+      <div class="card-number">02 / 11</div>
       <div class="card-tag">AI·엣지 디바이스</div>
       <h2>D-Specter 엣지 디바이스 기능 분석 보고서</h2>
       <p>Cerebix α 엣지 하드웨어 역량, AI 기능 및 스킬 로드맵 분석</p>
@@ -271,7 +283,7 @@
     </a>
 
     <a class="card" href="https://edgedevice-hrs6bujy.manus.space/" target="_blank">
-      <div class="card-number">03 / 10</div>
+      <div class="card-number">03 / 11</div>
       <div class="card-tag">AI·엣지 디바이스</div>
       <h2>Edge Device 비교: D-Specter vs Clobot</h2>
       <p>D-Specter와 Clobot 엣지 디바이스 상세 비교 분석 보고서</p>
@@ -282,7 +294,7 @@
     </a>
 
     <a class="card" href="./dspecter_comparison.html" target="_blank">
-      <div class="card-number">04 / 10</div>
+      <div class="card-number">04 / 11</div>
       <div class="card-tag">AI·엣지 디바이스</div>
       <h2>디스펙터 AI 엣지디바이스 vs 관리용 SW/서버 기술 비교</h2>
       <p>Vrain-X(온디바이스 현장 두뇌)와 AI-GCS(지능형 통합 관제 플랫폼) 상세 비교 분석</p>
@@ -293,7 +305,7 @@
     </a>
 
     <a class="card" href="./unitree_as2_b2_report.html" target="_blank">
-      <div class="card-number">05 / 10</div>
+      <div class="card-number">05 / 11</div>
       <div class="card-tag">로봇·하드웨어</div>
       <h2>Unitree As2 vs B2 비교 및 개발자 리소스 분석</h2>
       <p>B2 / As2 AIR · PRO · EDU 4개 모델 스펙 대비 및 2차 개발 리소스 분석</p>
@@ -304,7 +316,7 @@
     </a>
 
     <a class="card" href="./dispecter_unitree_synergy_report.html" target="_blank">
-      <div class="card-number">06 / 10</div>
+      <div class="card-number">06 / 11</div>
       <div class="card-tag">로봇·AI 시너지</div>
       <h2>디스펙터 x 유니트리 플랫폼 시너지 분석</h2>
       <p>dSPECTER(Cerebix) × Unitree(B2/As2) 결합 시너지 및 솔루션 아키텍처 분석</p>
@@ -315,7 +327,7 @@
     </a>
 
     <a class="card" href="./unitree_as2_purchase_review.html" target="_blank">
-      <div class="card-number">07 / 10</div>
+      <div class="card-number">07 / 11</div>
       <div class="card-tag">로봇·사업검토</div>
       <h2>유니트리 As2 구매 검토서</h2>
       <p>As2 구매를 통한 B2 기능 확장 가능성 및 As2 단독 사업 타당성 분석</p>
@@ -326,7 +338,7 @@
     </a>
 
     <a class="card" href="./unitree_a2_analysis.html" target="_blank">
-      <div class="card-number">08 / 10</div>
+      <div class="card-number">08 / 11</div>
       <div class="card-tag">로봇·하드웨어</div>
       <h2>유니트리 A2 조사 및 분석</h2>
       <p>A2 "Stellar Hunter" 상세 스펙 분석 및 B2 / As2 / A2 3종 비교</p>
@@ -337,7 +349,7 @@
     </a>
 
     <a class="card" href="./b2_developer_analysis.html" target="_blank">
-      <div class="card-number">09 / 10</div>
+      <div class="card-number">09 / 11</div>
       <div class="card-tag">로봇·개발자문서</div>
       <h2>B2 개발자 문서 분석 보고서</h2>
       <p>B2 SDK 구조, Sport API 21개 명령, 솔루션별 SDK 매핑 및 개발 로드맵</p>
@@ -348,10 +360,21 @@
     </a>
 
     <a class="card" href="./unitree_usecase_research.html" target="_blank">
-      <div class="card-number">10 / 10</div>
+      <div class="card-number">10 / 11</div>
       <div class="card-tag">시장·유스케이스</div>
       <h2>유니트리 로봇 실전 활용 사례 조사</h2>
       <p>농업·축산·소방·에너지·보안 분야 유니트리 로봇 글로벌 활용 사례 및 BnB 사업 기회 분석</p>
+      <div class="card-footer">
+        <span class="card-url">ohyunbeom.github.io/reports</span>
+        <span class="arrow">↗</span>
+      </div>
+    </a>
+
+    <a class="card" href="./edge_device_comparison.html" target="_blank">
+      <div class="card-number">11 / 11</div>
+      <div class="card-tag">AI·엣지 디바이스</div>
+      <h2>엣지 디바이스 효과 비교 및 경쟁사 분석</h2>
+      <p>엣지 디바이스 사용/미사용 개발 효과 비교, 디스펙터 경쟁사 벤치마킹, 견적서 기반 가성비 분석</p>
       <div class="card-footer">
         <span class="card-url">ohyunbeom.github.io/reports</span>
         <span class="arrow">↗</span>
@@ -363,7 +386,7 @@
 
 <footer>
   <span>© 윤범 · 보고서 모음</span>
-  <span>9 documents · manus.space</span>
+  <span>11 documents</span>
 </footer>
 
 </body>
