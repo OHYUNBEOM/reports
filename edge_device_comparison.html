@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>엣지 디바이스 효과 비교 및 디스펙터 경쟁사 분석</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f4f0;
+      --white: #ffffff;
+      --primary: #0f3d5c;
+      --primary-light: #e8f2f9;
+      --primary-mid: #1a6496;
+      --accent: #c8a96e;
+      --green: #27734a;
+      --green-light: #e8f4ee;
+      --orange: #b8860b;
+      --orange-light: #fef9e7;
+      --red: #c0392b;
+      --red-light: #fbeae8;
+      --purple: #6b4fa0;
+      --purple-light: #f0ebf7;
+      --text: #1a1a1a;
+      --muted: #555555;
+      --border: #e0ddd6;
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.14);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 20px;
+      line-height: 1.9;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #060e18 0%, #0f3d5c 40%, #1a2a3a 100%);
+      padding: 80px 60px 70px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(200, 169, 110, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-label {
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-label::before {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    .hero h1 {
+      font-weight: 900;
+      font-size: clamp(34px, 5vw, 56px);
+      color: #e8e2d9;
+      line-height: 1.3;
+      max-width: 800px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      margin-top: 14px;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 20px;
+      max-width: 100%;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 60px;
+    }
+
+    .section {
+      margin-top: 48px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 48px 48px 52px;
+      box-shadow: var(--shadow);
+    }
+
+    .section-label {
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--primary-mid);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--primary-mid);
+    }
+
+    .section h2 {
+      font-weight: 900;
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.35;
+      margin-bottom: 12px;
+    }
+
+    .section h2 em {
+      font-style: normal;
+      color: var(--primary-mid);
+    }
+
+    .section-desc {
+      font-size: 20px;
+      color: var(--muted);
+      margin-bottom: 36px;
+      max-width: 800px;
+    }
+
+    h3.sub-title {
+      font-weight: 700;
+      font-size: clamp(22px, 3vw, 28px);
+      margin-top: 44px;
+      margin-bottom: 18px;
+      padding-left: 16px;
+      border-left: 4px solid var(--primary-mid);
+    }
+
+    .note-box {
+      background: var(--white);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      padding: 22px 28px;
+      margin: 22px 0;
+      font-size: 19px;
+      color: var(--muted);
+      line-height: 1.85;
+    }
+
+    .note-box strong {
+      color: var(--text);
+    }
+
+    .note-box.blue {
+      border-left-color: var(--primary-mid);
+    }
+
+    .note-box.green {
+      border-left-color: var(--green);
+    }
+
+    .note-box.orange {
+      border-left-color: var(--orange);
+    }
+
+    .note-box.purple {
+      border-left-color: var(--purple);
+    }
+
+    .std-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 3px;
+      margin: 24px 0 32px;
+    }
+
+    .std-table thead th {
+      padding: 16px 22px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      text-align: left;
+      color: #fff;
+      background: var(--text);
+    }
+
+    .std-table thead th:first-child {
+      border-radius: 10px 0 0 10px;
+    }
+
+    .std-table thead th:last-child {
+      border-radius: 0 10px 10px 0;
+    }
+
+    .std-table td {
+      padding: 18px 22px;
+      font-size: 19px;
+      background: var(--white);
+      vertical-align: top;
+      line-height: 1.8;
+    }
+
+    .std-table td:first-child {
+      font-weight: 700;
+      font-size: 18px;
+      background: #fafaf8;
+      border-left: 3px solid var(--border);
+    }
+
+    .std-table tbody tr:hover td {
+      background: #fafaf8;
+    }
+
+    .verdict-box {
+      background: linear-gradient(135deg, #0a1a2e 0%, #0f3050 100%);
+      border-radius: 16px;
+      padding: 40px 44px;
+      margin: 32px 0;
+      color: #fff;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .verdict-box h3 {
+      font-family: 'Nunito', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 14px;
+      color: var(--accent);
+    }
+
+    .verdict-box p {
+      font-size: 20px;
+      line-height: 1.9;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 10px;
+    }
+
+    .verdict-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    .verdict-box strong {
+      color: #fff;
+    }
+
+    .verdict-box em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .comp-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px 36px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+      transition: transform 0.2s;
+    }
+
+    .comp-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .comp-card h4 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .comp-card .comp-desc {
+      font-size: 19px;
+      color: var(--text);
+      line-height: 1.85;
+      margin-bottom: 16px;
+    }
+
+    .comp-card .comp-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 24px;
+    }
+
+    .comp-card .comp-info span {
+      font-size: 17px;
+      color: var(--muted);
+    }
+
+    .comp-card .comp-info span strong {
+      color: var(--primary-mid);
+      font-weight: 700;
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 12px;
+    }
+
+    .badge-yes {
+      background: var(--green-light);
+      color: var(--green);
+    }
+
+    .badge-no {
+      background: var(--red-light);
+      color: var(--red);
+    }
+
+    .badge-partial {
+      background: var(--orange-light);
+      color: var(--orange);
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      margin: 28px 0;
+    }
+
+    .summary-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 28px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .summary-card .num {
+      font-family: 'Nunito', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--primary-mid);
+      margin-bottom: 6px;
+    }
+
+    .summary-card .title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .summary-card .desc {
+      font-size: 18px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    footer {
+      margin-top: 70px;
+      padding: 36px 60px;
+      border-top: 1px solid var(--border);
+      font-size: 15px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    @media (max-width: 768px) {
+
+      .hero,
+      .container,
+      footer {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      .section {
+        padding: 28px 20px 32px;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="hero">
+    <div class="hero-label">대표님 요청 검토</div>
+    <h1><em>엣지 디바이스</em> 활용 효과 비교 및 디스펙터 <em>경쟁사</em> 분석</h1>
+    <p class="hero-sub">엣지 디바이스 사용/미사용 개발 효과 비교 · 디스펙터와 유사한 한국·중국·해외 경쟁사 벤치마킹 · 견적서 기반 가성비 분석</p>
+  </div>
+
+  <div class="container">
+
+    <!-- ══ 검토 1: 엣지 비교 ══ -->
+    <div class="section">
+      <div class="section-label">검토 1</div>
+      <h2>엣지 디바이스 + 서버 사용 vs <em>미사용</em> 비교</h2>
+      <p class="section-desc">로봇에 엣지 디바이스(예: 디스펙터 Cerebix Core)를 장착하고 서버와 연동하는 경우와, <br>로봇 내장 컴퓨터만으로 개발하는 경우의 차이를 비교합니다.
+      </p>
+
+      <h3 class="sub-title">엣지 디바이스란?</h3>
+      <p>로봇에 장착하는 소형 AI 컴퓨터입니다. 서버실에 있는 것이 아니라, <strong>로봇 위에 직접 올려서 현장에서 바로 AI 분석을 수행</strong>합니다. 디스펙터의 Cerebix Core가
+        대표적인 예입니다 (NVIDIA Jetson AGX Orin 기반, 4kg).</p>
+
+      <h3 class="sub-title">엣지 디바이스 + 서버를 사용하면 좋은 점</h3>
+
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th>장점</th>
+            <th>설명</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>빠른 판단 속도</td>
+            <td>AI가 현장에서 바로 분석하므로 0.01초 이내에 결과가 나옵니다. 클라우드로 보내면 0.1~0.5초가 걸립니다.</td>
+          </tr>
+          <tr>
+            <td>네트워크 없어도 작동</td>
+            <td>지하 터널, 변전소 등 Wi-Fi가 안 되는 곳에서도 로봇이 혼자 자율적으로 작업합니다.</td>
+          </tr>
+          <tr>
+            <td>데이터 보안</td>
+            <td>시설 도면, 보안 영상 등 민감한 데이터가 외부로 나가지 않고 현장에서 처리됩니다.</td>
+          </tr>
+          <tr>
+            <td>다양한 AI 동시 실행</td>
+            <td>물체 인식 + 이상 감지 + 지도 생성을 동시에 처리할 수 있습니다.</td>
+          </tr>
+          <tr>
+            <td>로봇 교체 시 이식</td>
+            <td>엣지 디바이스를 떼어서 다른 로봇에 올리면 AI 기능이 그대로 이전됩니다.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="note-box blue">
+        <strong>서버의 역할:</strong> 여러 대의 로봇을 한 화면에서 관리(관제), AI 모델 학습 및 업데이트, 장기 데이터 분석, 업무 시스템(ERP 등)과 연동을 담당합니다.
+      </div>
+
+      <h3 class="sub-title">엣지 디바이스 없이 개발하면?</h3>
+
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th>항목</th>
+            <th>설명</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>AI 성능 제한</td>
+            <td>로봇 내장 컴퓨터는 보행 제어용으로 설계되어, AI 처리 능력이 엣지 디바이스의 1/10~1/30 수준입니다.</td>
+          </tr>
+          <tr>
+            <td>동시 처리 불가</td>
+            <td>물체 인식 + 이상 감지 + 지도 생성을 동시에 돌리기 어렵습니다.</td>
+          </tr>
+          <tr>
+            <td>업그레이드 불가</td>
+            <td>로봇 내장 컴퓨터는 공장에서 고정된 사양이라, 더 좋은 하드웨어가 나와도 교체할 수 없습니다.</td>
+          </tr>
+          <tr>
+            <td>가능한 것</td>
+            <td>기본 자율주행(사전 지도 기반), 단순 장애물 감지, 원격 조종, 단순 알람(온도 임계값 등)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-title">핵심 비교</h3>
+
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th>비교 항목</th>
+            <th>엣지 디바이스 + 서버</th>
+            <th>엣지 없이 개발</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>AI 판단 속도</td>
+            <td>0.01초 이내</td>
+            <td>0.05~0.2초 (제한적 모델)</td>
+          </tr>
+          <tr>
+            <td>AI 처리 능력</td>
+            <td>275 TOPS (초당 275조 회 연산)</td>
+            <td>1~10 TOPS</td>
+          </tr>
+          <tr>
+            <td>네트워크 의존성</td>
+            <td>낮음 (엣지가 독립 작동)</td>
+            <td>낮음 (단, 기능 제한적)</td>
+          </tr>
+          <tr>
+            <td>복수 AI 동시 실행</td>
+            <td>가능</td>
+            <td>불가능 또는 매우 제한적</td>
+          </tr>
+          <tr>
+            <td>로봇 교체 시 이식</td>
+            <td>가능 (엣지 디바이스 이동)</td>
+            <td>불가 (로봇에 종속)</td>
+          </tr>
+          <tr>
+            <td>적합한 용도</td>
+            <td>산업 점검, 보안, 복잡한 자율주행</td>
+            <td>단순 물류, 기본 순찰</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="verdict-box">
+        <h3>결론</h3>
+        <p>2026년 현재 산업용 로봇 분야에서는 <em>'엣지 + 서버' 하이브리드 구조가 표준</em>입니다. 엣지가 현장에서 안전과 인식을 담당하고, 서버가 AI 학습과 관제를 담당하는 구조입니다.
+        </p>
+        <p>우리가 목표로 하는 순찰/점검/보안 솔루션은 <strong>복수의 AI를 동시에 돌려야 하므로, 엣지 디바이스 사용이 효과적</strong>입니다.</p>
+      </div>
+    </div>
+
+    <!-- ══ 검토 2: 경쟁사 ══ -->
+    <div class="section">
+      <div class="section-label">검토 2</div>
+      <h2>디스펙터 <em>경쟁사</em> 벤치마킹</h2>
+      <p class="section-desc">디스펙터와 유사한 제품/서비스를 제공하는 한국, 중국, 해외 기업을 조사했습니다.</p>
+
+      <h3 class="sub-title">디스펙터 핵심 제품</h3>
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th>제품</th>
+            <th>설명</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Cerebix Core</td>
+            <td>로봇에 장착하는 엣지 AI 장치 (NVIDIA Jetson AGX Orin, 4kg)</td>
+          </tr>
+          <tr>
+            <td>Cerebix Copilot</td>
+            <td>여러 대의 로봇을 통합 관리하는 소프트웨어</td>
+          </tr>
+          <tr>
+            <td>스타터 앱 3종</td>
+            <td>자율 경비, 공정설비 점검, 현장 안전관리</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="note-box blue">
+        <strong>핵심 특징:</strong> 특정 로봇 제조사에 종속되지 않는 독립적 플랫폼. 유니트리 B2, Spot 등 어떤 로봇에든 장착 가능합니다.
+      </div>
+
+      <!-- 한국 경쟁사 -->
+      <h3 class="sub-title">한국 경쟁사</h3>
+
+      <div class="comp-card">
+        <h4>클로봇 / Clobot (코스닥 상장)</h4>
+        <div class="comp-desc">Boston Dynamics Spot의 한국 공식 파트너입니다. 로봇 통합 관리 플랫폼(CROMS)을 운영하며, 현대자동차 공장 Spot 배치를 지원했습니다.
+          연간 30건 이상의 로봇 프로젝트를 수행합니다.</div>
+        <div class="comp-info">
+          <span><strong>엣지 장치:</strong> 없음</span>
+          <span><strong>관제 SW:</strong> 있음 (CROMS)</span>
+          <span><strong>로봇 독립성:</strong> Spot 중심</span>
+        </div>
+        <div class="note-box" style="margin-top:14px;margin-bottom:0">
+          <strong>디스펙터 대비:</strong> SI(시스템 통합) 업체 성격이 강함. 자체 엣지 HW가 없고, Spot 전용에 가까워 로봇 독립성 부족
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <h4>쿳션 / Cutshion</h4>
+        <div class="comp-desc">로봇 애플리케이션 개발용 미들웨어 Pionoid를 개발 중. 디스펙터처럼 특정 로봇에 종속되지 않는 플랫폼을 지향하지만, 아직 초기 단계입니다.</div>
+        <div class="comp-info">
+          <span><strong>엣지 장치:</strong> 없음</span>
+          <span><strong>투자:</strong> 시드 5억 원</span>
+        </div>
+        <div class="note-box" style="margin-top:14px;margin-bottom:0">
+          <strong>디스펙터 대비:</strong> 앱 미들웨어 성격이라 엣지 HW나 관제 기능이 없음. 규모도 작음
+        </div>
+      </div>
+
+      <!-- 중국 경쟁사 -->
+      <h3 class="sub-title">중국 경쟁사</h3>
+
+      <div class="comp-card">
+        <h4>SEER Robotics / 仙工智能</h4>
+        <div class="comp-desc">로봇 제어기('로봇 두뇌')와 Fleet 관리 소프트웨어를 판매하는 중국 기업입니다. 로봇을 직접 만들지 않고, 다른 로봇 제조사에 제어기와 관리 시스템을
+          공급합니다. 2023~2024년 전 세계 로봇 제어기 출하량 1위를 기록했습니다.</div>
+        <div class="comp-info">
+          <span><strong>엣지 장치:</strong> 있음 (제어기)</span>
+          <span><strong>관제 SW:</strong> 있음 (RDS)</span>
+          <span><strong>로봇 독립성:</strong> 있음</span>
+        </div>
+        <div class="note-box" style="margin-top:14px;margin-bottom:0">
+          <strong>디스펙터 대비:</strong> 컨셉이 가장 유사하나, 물류 로봇(실내 바퀴형) 전문. 4족 보행 로봇이나 산업 점검 분야는 아직 미진출
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <h4>CloudMinds / 达闼科技</h4>
+        <div class="comp-desc">'클라우드 두뇌' 플랫폼(HARIX)으로 수백만 대의 로봇을 동시에 운영할 수 있는 기술을 보유. 클라우드-엣지-로봇 분산 컴퓨팅 구조를 갖추고 있으며, 자체
+          서비스 로봇도 판매합니다.</div>
+        <div class="comp-info">
+          <span><strong>엣지 장치:</strong> 있음</span>
+          <span><strong>관제 SW:</strong> 있음 (HARIX)</span>
+          <span><strong>로봇 독립성:</strong> 부분적</span>
+        </div>
+        <div class="note-box" style="margin-top:14px;margin-bottom:0">
+          <strong>디스펙터 대비:</strong> 유사한 클라우드-엣지 구조이나, 주로 자체 로봇과 함께 판매. 서비스 로봇 위주이며 산업 점검용 4족 로봇 분야는 아님
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <h4>Jiangxing Intelligence / 江行智能</h4>
+        <div class="comp-desc">산업용 엣지 AI 플랫폼(IDEA)을 제공. 특히 에너지 분야(풍력, 태양광, 수력, 전력망)에 특화된 AI 영상 분석 솔루션을 갖추고 있습니다.</div>
+        <div class="comp-info">
+          <span><strong>엣지 장치:</strong> 있음 (IDEA)</span>
+          <span><strong>투자:</strong> Pre-B 수억 위안</span>
+        </div>
+        <div class="note-box" style="margin-top:14px;margin-bottom:0">
+          <strong>디스펙터 대비:</strong> 에너지 분야 엣지 AI + 점검 앱에서는 유사하나, 로봇 제어 기능은 없음. 카메라/센서 분석에 집중
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <h4>Yijiahe / 亿嘉和 (상해증시 상장)</h4>
+        <div class="comp-desc">변전소·전력 시설용 점검 로봇을 만드는 중국 상장 기업. 로봇 + 소프트웨어 + AI를 모두 자체 생산하여 국가전력망(State Grid) 등에 납품합니다.
+        </div>
+        <div class="comp-info">
+          <span><strong>엣지 장치:</strong> 로봇에 내장</span>
+          <span><strong>로봇 독립성:</strong> 없음 (자체 로봇만)</span>
+        </div>
+        <div class="note-box" style="margin-top:14px;margin-bottom:0">
+          <strong>디스펙터 대비:</strong> 완전한 일체형 제조사. 로봇+SW+AI를 모두 자체 생산하므로 사업 모델이 다름
+        </div>
+      </div>
+
+      <!-- 해외 경쟁사 -->
+      <h3 class="sub-title">해외 주요 경쟁사</h3>
+
+      <div class="comp-card">
+        <h4>Energy Robotics (독일) — 글로벌에서 가장 유사한 경쟁사</h4>
+        <div class="comp-desc">8종 이상의 로봇에 호환되는 소프트웨어 플랫폼. Shell, BP, BASF 등 글로벌 대기업이 고객이며, 누적 100만 건 이상의 점검을 수행했습니다.
+          5대륙에 진출.</div>
+        <div class="comp-info">
+          <span><strong>엣지 장치:</strong> 없음 (SW만)</span>
+          <span><strong>투자:</strong> 시리즈 A 약 180억 원 (2025.10)</span>
+        </div>
+        <div class="note-box" style="margin-top:14px;margin-bottom:0">
+          <strong>디스펙터 대비:</strong> 소프트웨어 기능은 유사하나, 물리적 엣지 장치를 제공하지 않음. 디스펙터는 HW+SW 모두 제공하는 점이 차별점
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <h4>ANYbotics (스위스) — 고가 일체형 경쟁사</h4>
+        <div class="comp-desc">자체 로봇(ANYmal)에 엣지 컴퓨팅과 관제 소프트웨어를 모두 통합한 일체형 솔루션. 폭발 위험 환경 인증(ATEX)을 받았으며, Petronas,
+          Petrobras 등이 고객.</div>
+        <div class="comp-info">
+          <span><strong>가격:</strong> 대당 약 2억 원+ ($150K+)</span>
+          <span><strong>로봇 독립성:</strong> 없음 (자체 로봇만)</span>
+        </div>
+        <div class="note-box" style="margin-top:14px;margin-bottom:0">
+          <strong>디스펙터 대비:</strong> 자체 로봇만 지원(독립성 없음), 가격이 매우 비쌈
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 종합 비교 ══ -->
+    <div class="section">
+      <div class="section-label">종합 비교</div>
+      <h2>경쟁사 <em>종합 비교표</em></h2>
+
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th>회사</th>
+            <th>국가</th>
+            <th>엣지 HW</th>
+            <th>관제 SW</th>
+            <th>로봇 독립성</th>
+            <th>즉시 사용 앱</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>디스펙터</td>
+            <td>한국</td>
+            <td><span class="badge badge-yes">있음</span></td>
+            <td><span class="badge badge-yes">있음</span></td>
+            <td><span class="badge badge-yes">있음</span></td>
+            <td><span class="badge badge-yes">3종</span></td>
+          </tr>
+          <tr>
+            <td>클로봇</td>
+            <td>한국</td>
+            <td><span class="badge badge-no">없음</span></td>
+            <td><span class="badge badge-yes">있음</span></td>
+            <td><span class="badge badge-partial">Spot 중심</span></td>
+            <td><span class="badge badge-no">없음</span></td>
+          </tr>
+          <tr>
+            <td>쿳션</td>
+            <td>한국</td>
+            <td><span class="badge badge-no">없음</span></td>
+            <td><span class="badge badge-no">없음</span></td>
+            <td><span class="badge badge-yes">있음</span></td>
+            <td><span class="badge badge-no">없음</span></td>
+          </tr>
+          <tr>
+            <td>SEER / 仙工智能</td>
+            <td>중국</td>
+            <td><span class="badge badge-yes">있음</span></td>
+            <td><span class="badge badge-yes">있음</span></td>
+            <td><span class="badge badge-yes">있음</span></td>
+            <td><span class="badge badge-partial">물류 전용</span></td>
+          </tr>
+          <tr>
+            <td>CloudMinds / 达闼</td>
+            <td>중국</td>
+            <td><span class="badge badge-yes">있음</span></td>
+            <td><span class="badge badge-yes">있음</span></td>
+            <td><span class="badge badge-partial">부분적</span></td>
+            <td><span class="badge badge-partial">서비스 로봇</span></td>
+          </tr>
+          <tr>
+            <td>Jiangxing / 江行智能</td>
+            <td>중국</td>
+            <td><span class="badge badge-yes">있음</span></td>
+            <td><span class="badge badge-yes">있음</span></td>
+            <td><span class="badge badge-yes">있음</span></td>
+            <td><span class="badge badge-partial">에너지 전용</span></td>
+          </tr>
+          <tr>
+            <td>Yijiahe / 亿嘉和</td>
+            <td>중국</td>
+            <td><span class="badge badge-partial">내장</span></td>
+            <td><span class="badge badge-yes">있음</span></td>
+            <td><span class="badge badge-no">자체만</span></td>
+            <td><span class="badge badge-yes">있음</span></td>
+          </tr>
+          <tr>
+            <td>Energy Robotics</td>
+            <td>독일</td>
+            <td><span class="badge badge-no">없음</span></td>
+            <td><span class="badge badge-yes">있음</span></td>
+            <td><span class="badge badge-yes">8종+</span></td>
+            <td><span class="badge badge-yes">있음</span></td>
+          </tr>
+          <tr>
+            <td>ANYbotics</td>
+            <td>스위스</td>
+            <td><span class="badge badge-partial">내장</span></td>
+            <td><span class="badge badge-yes">있음</span></td>
+            <td><span class="badge badge-no">자체만</span></td>
+            <td><span class="badge badge-yes">있음</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="verdict-box">
+        <h3>핵심 발견</h3>
+        <p>중국에는 디스펙터와 정확히 같은 모델(<em>로봇 독립적 엣지 AI + 관제 + 턴키 앱</em>)을 제공하는 기업이 없습니다.</p>
+        <p>중국 기업들은 대부분 로봇과 소프트웨어를 함께 파는 일체형이거나, 물류 로봇 전용이거나, 카메라 분석에 집중하는 등 디스펙터와 직접 겹치는 경쟁사가 없습니다.</p>
+      </div>
+
+      <h3 class="sub-title">디스펙터의 차별성</h3>
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="num">차별성 1</div>
+          <div class="title">엣지 HW + SW 모두 제공</div>
+          <div class="desc">엣지 하드웨어와 소프트웨어를 모두 제공하는 유일한 한국 기업</div>
+        </div>
+        <div class="summary-card">
+          <div class="num">차별성 2</div>
+          <div class="title">로봇 독립적 플랫폼</div>
+          <div class="desc">특정 로봇에 종속되지 않아 유니트리 B2 등 다양한 로봇에 적용 가능</div>
+        </div>
+        <div class="summary-card">
+          <div class="num">차별성 3</div>
+          <div class="title">즉시 사용 가능한 앱</div>
+          <div class="desc">스타터 앱 3종(경비, 점검, 안전)으로 도입 장벽이 낮음</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 가성비 분석 ══ -->
+    <div class="section">
+      <div class="section-label">가성비 분석</div>
+      <h2>견적서 기반 <em>비용 비교</em></h2>
+      <p class="section-desc">디스펙터 최종 제안서(260313) 및 상세 견적서를 기반으로, 실제 비용 구조를 정리했습니다.</p>
+
+      <h3 class="sub-title">디스펙터 비용 구조 (카우봇 1단계 기준)</h3>
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th>항목</th>
+            <th>금액</th>
+            <th>비고</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>10주간 투입 인력</td>
+            <td>8천만 원</td>
+            <td>프로젝트 리더 + PM + 박사급 1 + 엔지니어 1 (총 8MM)</td>
+          </tr>
+          <tr>
+            <td>엣지 AI HW/SW + 서버</td>
+            <td>9천만 원</td>
+            <td>B2 2대용 엣지 HW + 관리용 SW/서버 각 1기</td>
+          </tr>
+          <tr>
+            <td>디스펙터 자체 투자</td>
+            <td>-7천만 원</td>
+            <td>공동 사업화 의지 반영</td>
+          </tr>
+          <tr>
+            <td><strong>디스펙터 최종 비용</strong></td>
+            <td><strong>1억 원</strong></td>
+            <td>부가세 별도 (부가세 포함 1.1억 원)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-title">경쟁사 대비 비용 비교</h3>
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th>구성</th>
+            <th>비용</th>
+            <th>포함 내용</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ANYbotics ANYmal</td>
+            <td>약 2억 원+</td>
+            <td>로봇 1대 + AI + 관제 일체형</td>
+          </tr>
+          <tr>
+            <td>Spot + Energy Robotics</td>
+            <td>약 1.5억 원+</td>
+            <td>Spot 약 1억 원 + SW 라이선스 별도</td>
+          </tr>
+          <tr>
+            <td><strong>B2 2대 + 디스펙터</strong></td>
+            <td><strong>약 2.1~2.4억 원</strong></td>
+            <td>B2 2대 + 충전도크 2기 + 기타 HW + 엣지 AI + 서버 + 10주 개발</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="note-box blue">
+        <strong>참고:</strong> 위 비용은 카우봇 1단계 기준으로, B2 2대 + 충전도크 2기 + 기타 HW + 디스펙터 비용을 모두 포함한 금액입니다. 단순히 엣지 디바이스 단가만 비교하는
+        것보다, 10주간 개발 인력과 서버가 함께 포함된 패키지라는 점에서 단순 비교는 어렵습니다.
+      </div>
+
+      <div class="verdict-box">
+        <h3>가성비 평가</h3>
+        <p>ANYbotics는 로봇 <em>1대</em> 가격이 약 2억 원인 반면, 우리는 <strong>B2 2대 + 엣지 AI + 서버 + 10주 개발비</strong>를 모두 포함해서 약
+          2.1~2.4억 원이므로, 구성 내용 대비 가성비는 우위에 있다고 볼 수 있습니다.</p>
+        <p>다만, 디스펙터 비용 중 <em>엣지 AI HW/SW + 서버가 9천만 원</em>으로 비중이 큰 편이므로, 이 부분의 상세 내역(엣지 HW 단가, SW 라이선스, 서버 비용 각각)은 디스펙터에
+          추가 확인이 필요합니다.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>BnB · 엣지 디바이스 효과 비교 및 경쟁사 분석</span>
+    <span>로봇 가격: Unitree 공식 스토어 · 디스펙터 비용: 최종 제안서/상세 견적서(260313) · 경쟁사: 각사 공식 사이트</span>
+  </footer>
+
+</body>
+
+</html>
